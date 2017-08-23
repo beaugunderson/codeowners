@@ -1,0 +1,28 @@
+{
+  "name": "codeowners",
+  "version": "1.0.0",
+  "description": "A tool for working with CODEOWNERS files",
+  "main": "codeowners.js",
+  "bin": {
+    "codeowners": "./codeowners.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "codeowners",
+    "github"
+  ],
+  "author": "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^2.11.0",
+    "find-up": "^2.1.0",
+    "ignore": "^3.3.3",
+    "is-directory": "^0.3.1",
+    "lodash.maxby": "^4.6.0",
+    "lodash.padend": "^4.6.1",
+    "recursive-readdir": "^2.2.1",
+    "true-case-path": "^1.0.2"
+  }
+}
