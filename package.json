@@ -24,5 +24,14 @@
     "lodash.padend": "^4.6.1",
     "recursive-readdir": "^2.2.1",
     "true-case-path": "^1.0.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beaugunderson/codeowners.git"
+  },
+  "bugs": {
+    "url": "https://github.com/beaugunderson/codeowners/issues"
+  },
+  "homepage": "https://github.com/beaugunderson/codeowners#readme"
 }
