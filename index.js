@@ -27,6 +27,7 @@ program
   .command('audit')
   .description('list the owners for all files')
   .option('-u, --unowned', 'unowned files only')
+  .option('-d, --min-depth <n>', 'roll up unowned files to common paths, but to a minimum depth (only works for unowned)', parseInt)
   .action(options => {
     const codeowners = new Codeowners(rootPath);
 
@@ -41,11 +42,26 @@ program
       const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
       const maxLength = maxBy(filteredFiles, file => file.length).length;
 
+      const unownedDirs = new Set();
+
       filteredFiles.forEach(file => {
         let owners = codeowners.getOwner(file);
         if (options.unowned) {
           if (!owners.length) {
-            return console.log(file);
+
+            if (options.minDepth) {
+              while (!owners.length && file.split(path.sep).length > options.minDepth) {
+                const parentPath = path.dirname(file);
+                owners = codeowners.getOwner(parentPath);
+                if (!owners.length) {
+                  file = parentPath;
+                } else {
+                  break;
+                }
+              }
+            }
+
+            unownedDirs.add(file);
           }
         } else {
           let owner = 'nobody';
@@ -55,6 +71,10 @@ program
           console.log(`${padEnd(file, maxLength)}    ${owners}`);
         }
       });
+
+      if (options.unowned) {
+        unownedDirs.forEach(path => console.log(path));
+      }
     });
   });
 
