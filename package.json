@@ -2,7 +2,7 @@
   "name": "codeowners",
   "version": "1.0.1",
   "description": "A tool for working with CODEOWNERS files",
-  "main": "codeowners.js",
+  "main": "index.js",
   "bin": {
     "codeowners": "./codeowners.js"
   },
