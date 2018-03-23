@@ -2,9 +2,9 @@
   "name": "codeowners",
   "version": "1.0.1",
   "description": "A tool for working with CODEOWNERS files",
-  "main": "index.js",
+  "main": "codeowners.js",
   "bin": {
-    "codeowners": "./codeowners.js"
+    "codeowners": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,10 @@
     "codeowners",
     "github"
   ],
-  "author": "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
+  "contributors": [
+    "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
+    "Noah Manneschmidt (https://noah.manneschmidt.net/)"
+  ],
   "license": "MIT",
   "dependencies": {
     "commander": "^2.11.0",
