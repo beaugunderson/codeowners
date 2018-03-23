@@ -10,10 +10,7 @@ const trueCasePath = require('true-case-path');
 
 function ownerMatcher(pathString) {
   const matcher = ignore().add(pathString);
-
-  return function (fileString) {
-    return matcher.ignores(fileString);
-  };
+  return matcher.ignores.bind(matcher);
 }
 
 function Codeowners(currentPath) {

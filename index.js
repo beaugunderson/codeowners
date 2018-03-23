@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 // @ts-check
-
 'use strict';
 
 const findUp = require('find-up');
@@ -16,11 +15,6 @@ const Codeowners = require('./codeowners');
 
 // TODO make a command-line option, and find .git
 const rootPath = process.cwd();
-
-function ownerMatcher(pathString) {
-  const matcher = ignore().add(pathString);
-  return matcher.ignores.bind(matcher);
-}
 
 const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
 const gitignoreMatcher = ignore();
