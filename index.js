@@ -11,7 +11,7 @@ const path = require('path');
 const program = require('commander');
 const recursive = require('recursive-readdir');
 
-const Codeowners = require('./codeowners');
+const Codeowners = require('./codeowners.js');
 
 // TODO make a command-line option, and find .git
 const rootPath = process.cwd();
