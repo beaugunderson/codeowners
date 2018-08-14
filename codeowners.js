@@ -18,7 +18,7 @@ function Codeowners(currentPath) {
     currentPath = process.cwd();
   }
 
-  this.codeownersFilePath = trueCasePath(findUp.sync('.github/CODEOWNERS', { cwd: currentPath }));
+  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], { cwd: currentPath }));
 
   this.codeownersDirectory = path.dirname(path.dirname(this.codeownersFilePath));
   const codeownersFile = path.basename(this.codeownersFilePath);
