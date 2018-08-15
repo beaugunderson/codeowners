@@ -48,11 +48,11 @@ program
             return console.log(file);
           }
         } else {
-          let owner = 'nobody';
+          let printedOwner = 'nobody';
           if (owners.length) {
-            owner = owners.join(' ');
+            printedOwner = owners.join(' ');
           }
-          console.log(`${padEnd(file, maxLength)}    ${owners}`);
+          console.log(`${padEnd(file, maxLength)}    ${printedOwner}`);
         }
       });
     });
