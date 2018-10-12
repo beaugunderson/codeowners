@@ -16,7 +16,7 @@ const Codeowners = require('./codeowners.js');
 // TODO make a command-line option, and find .git
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
+const gitignorePath = findUp.sync('.gitignore', {cwd: rootPath});
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {

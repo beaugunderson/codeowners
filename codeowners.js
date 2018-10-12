@@ -1,7 +1,4 @@
-#!/usr/bin/env node
-
 // @ts-check
-
 'use strict';
 
 const findUp = require('find-up');
