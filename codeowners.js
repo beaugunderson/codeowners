@@ -1,4 +1,7 @@
+#!/usr/bin/env node
+
 // @ts-check
+
 'use strict';
 
 const findUp = require('find-up');
@@ -18,7 +21,7 @@ function Codeowners(currentPath) {
     currentPath = process.cwd();
   }
 
-  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], { cwd: currentPath }));
+  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], {cwd: currentPath}));
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
   // We might have found a bare codeowners file or one inside the two supported subdirectories.
@@ -68,6 +71,6 @@ Codeowners.prototype.getOwner = function (filePath) {
     }
   }
   return owners.slice();
-}
+};
 
 module.exports = Codeowners;
