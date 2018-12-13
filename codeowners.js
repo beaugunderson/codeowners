@@ -18,12 +18,12 @@ function Codeowners(currentPath) {
     currentPath = process.cwd();
   }
 
-  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], {cwd: currentPath}));
+  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', '.gitlab/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], {cwd: currentPath}));
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
-  // We might have found a bare codeowners file or one inside the two supported subdirectories.
+  // We might have found a bare codeowners file or one inside the three supported subdirectories.
   // In the latter case the project root is up another level.
-  if (this.codeownersDirectory.match(/\/(.github|docs)$/i)) {
+  if (this.codeownersDirectory.match(/\/(.github|.gitlab|docs)$/i)) {
     this.codeownersDirectory = path.dirname(this.codeownersDirectory);
   }
   const codeownersFile = path.basename(this.codeownersFilePath);
