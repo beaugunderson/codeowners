@@ -12,7 +12,8 @@
   },
   "keywords": [
     "codeowners",
-    "github"
+    "github",
+    "gitlab"
   ],
   "contributors": [
     "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
