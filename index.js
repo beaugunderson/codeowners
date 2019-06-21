@@ -9,9 +9,35 @@ const maxBy = require('lodash.maxby');
 const padEnd = require('lodash.padend');
 const path = require('path');
 const program = require('commander');
-const recursive = require('recursive-readdir');
 
 const Codeowners = require('./codeowners.js');
+
+// https://stackoverflow.com/a/5827895
+function walk(dir, excludedFiles, done) {
+  let results = [];
+  fs.readdir(dir, (err, list) => {
+
+    if (err) return done(err);
+    list = list.filter(file => !excludedFiles.includes(file));
+    let pending = list.length;
+    if (!pending) return done(null, results);
+
+    list.forEach(file => {
+      file = path.resolve(dir, file);
+      fs.stat(file, (err, stat) => {
+        if (stat && stat.isDirectory()) {
+          walk(file, excludedFiles, (err, res) => {
+            results = results.concat(res);
+            if (!--pending) done(null, results);
+          });
+        } else {
+          results.push(file);
+          if (!--pending) done(null, results);
+        }
+      });
+    });
+  });
+}
 
 // TODO make a command-line option, and find .git
 const rootPath = process.cwd();
@@ -30,12 +56,14 @@ program
   .action(options => {
     const codeowners = new Codeowners(rootPath);
 
-    recursive(rootPath, ['.git', 'node_modules'], (err, files) => {
+    walk(rootPath, ['.git', 'node_modules'], (err, files) => {
       if (err) {
         console.error(err);
 
         process.exit(1);
       }
+
+      files.sort();
 
       const relativeFiles = files.map(file => path.relative(codeowners.codeownersDirectory, file));
       const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
