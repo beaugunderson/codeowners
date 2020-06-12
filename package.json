@@ -1,6 +1,6 @@
 {
-  "name": "codeowners",
-  "version": "4.1.1",
+  "name": "@zapier/codeowners",
+  "version": "5.0.0",
   "description": "A tool for working with CODEOWNERS files",
   "main": "codeowners.js",
   "types": "codeowners.d.ts",
@@ -17,7 +17,8 @@
   ],
   "contributors": [
     "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
-    "Noah Manneschmidt (https://noah.manneschmidt.net/)"
+    "Noah Manneschmidt (https://noah.manneschmidt.net/)",
+    "Vitor Balocco <vitor.balocco@zapier.com>"
   ],
   "license": "MIT",
   "dependencies": {
@@ -32,10 +33,10 @@
   "devDependencies": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beaugunderson/codeowners.git"
+    "url": "git+https://github.com/zapier/codeowners.git"
   },
   "bugs": {
-    "url": "https://github.com/beaugunderson/codeowners/issues"
+    "url": "https://github.com/zapier/codeowners/issues"
   },
-  "homepage": "https://github.com/beaugunderson/codeowners#readme"
+  "homepage": "https://github.com/zapier/codeowners#readme"
 }

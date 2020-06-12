@@ -16,7 +16,6 @@ const Codeowners = require('./codeowners.js');
 function walk(dir, excludedFiles, done) {
   let results = [];
   fs.readdir(dir, (err, list) => {
-
     if (err) return done(err);
     list = list.filter(file => !excludedFiles.includes(file));
     let pending = list.length;
@@ -42,9 +41,8 @@ function walk(dir, excludedFiles, done) {
 // TODO make a command-line option, and find .git
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', {cwd: rootPath});
 const gitignoreMatcher = ignore();
-
+const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
 if (gitignorePath) {
   gitignoreMatcher.add(fs.readFileSync(gitignorePath).toString());
 }
@@ -56,34 +54,88 @@ program
   .action(options => {
     const codeowners = new Codeowners(rootPath);
 
-    walk(rootPath, ['.git', 'node_modules'], (err, files) => {
-      if (err) {
-        console.error(err);
+    walk(
+      rootPath,
+      ['.git', 'node_modules', '@types', '.github', 'flow-typed', '.vscode'],
+      (err, files) => {
+        if (err) {
+          console.error(err);
 
-        process.exit(1);
-      }
-
-      files.sort();
-
-      const relativeFiles = files.map(file => path.relative(codeowners.codeownersDirectory, file));
-      const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
-      const maxLength = maxBy(filteredFiles, file => file.length).length;
-
-      filteredFiles.forEach(file => {
-        let owners = codeowners.getOwner(file);
-        if (options.unowned) {
-          if (!owners.length) {
-            return console.log(file);
-          }
-        } else {
-          let printedOwner = 'nobody';
-          if (owners.length) {
-            printedOwner = owners.join(' ');
-          }
-          console.log(`${padEnd(file, maxLength)}    ${printedOwner}`);
+          process.exit(1);
         }
-      });
-    });
+
+        files.sort();
+
+        const relativeFiles = files.map(file =>
+          path.relative(codeowners.codeownersDirectory, file)
+        );
+
+        const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
+        if (gitignorePath) {
+          gitignoreMatcher.add(fs.readFileSync(gitignorePath).toString());
+        }
+        const filteredFiles = relativeFiles
+          .filter(gitignoreMatcher.createFilter())
+          .sort();
+        const maxLength = maxBy(filteredFiles, file => file.length).length;
+
+        const uniqueEntries = new Map();
+
+        filteredFiles.forEach(file => {
+          let owners = codeowners.getOwner(file);
+          if (options.unowned) {
+            if (!owners.length) {
+              const rootFoldersWithFilesWeCareAbout = [
+                'end-to-end',
+                'web/frontend',
+                'web/backend',
+                'web',
+                'web-ssr',
+                '', // root folder
+              ];
+
+              const nestedFoldersWeDontCareAbout = [
+                '__generated__',
+                '__snapshots__',
+                '.venv',
+                'web/static/images',
+                'web/frontend/assets/images',
+              ];
+
+              const dirname = path.dirname(file);
+
+              if (
+                nestedFoldersWeDontCareAbout.some(folder =>
+                  dirname.includes(folder)
+                )
+              ) {
+                return;
+              }
+
+              if (
+                rootFoldersWithFilesWeCareAbout.some(
+                  folder => path.dirname(file) === folder
+                )
+              ) {
+                uniqueEntries.set(file, file);
+                return;
+              }
+
+              uniqueEntries.set(path.dirname(file), file);
+              return;
+            }
+          } else {
+            let printedOwner = 'nobody';
+            if (owners.length) {
+              printedOwner = owners.join(' ');
+            }
+            console.log(`${padEnd(file, maxLength)}    ${printedOwner}`);
+          }
+        });
+
+        Array.from(uniqueEntries.keys()).forEach(e => console.log(e));
+      }
+    );
   });
 
 if (!process.argv.slice(2).length) {

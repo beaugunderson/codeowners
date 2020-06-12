@@ -1,5 +1,7 @@
 # codeowners
 
+Forked to tailor log output specifically to zapier/zapier's requirements. **This fork is not meant to work with any repository other than zapier/zapier**.
+
 A tool for interacting with GitHub's
 [CODEOWNERS](https://help.github.com/articles/about-codeowners/) files.
 
@@ -8,7 +10,7 @@ Usable as a CLI, or as a library.
 ## installation
 
 ```sh
-$ npm install -g codeowners
+$ npm install -g @zapier/codeowners
 ```
 
 ## cli usage
@@ -28,7 +30,7 @@ $ codeowners audit --unowned
 ## library usage
 
 ```js
-const Codeowners = require('codeowners');
+const Codeowners = require('@zapier/codeowners');
 
 // workingDir is optional, defaults to process.cwd()
 const repos = new Codeowners(workingDir);

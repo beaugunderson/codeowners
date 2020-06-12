@@ -18,7 +18,17 @@ function Codeowners(currentPath) {
     currentPath = process.cwd();
   }
 
-  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', '.gitlab/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], {cwd: currentPath}));
+  this.codeownersFilePath = trueCasePath(
+    findUp.sync(
+      [
+        '.github/CODEOWNERS',
+        '.gitlab/CODEOWNERS',
+        'docs/CODEOWNERS',
+        'CODEOWNERS',
+      ],
+      { cwd: currentPath }
+    )
+  );
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
   // We might have found a bare codeowners file or one inside the three supported subdirectories.
@@ -29,11 +39,15 @@ function Codeowners(currentPath) {
   const codeownersFile = path.basename(this.codeownersFilePath);
 
   if (codeownersFile !== 'CODEOWNERS') {
-    throw new Error(`Found a CODEOWNERS file but it was lower-cased: ${this.codeownersFilePath}`);
+    throw new Error(
+      `Found a CODEOWNERS file but it was lower-cased: ${this.codeownersFilePath}`
+    );
   }
 
   if (isDirectory.sync(this.codeownersFilePath)) {
-    throw new Error(`Found a CODEOWNERS but it's a directory: ${this.codeownersFilePath}`);
+    throw new Error(
+      `Found a CODEOWNERS but it's a directory: ${this.codeownersFilePath}`
+    );
   }
 
   const lines = fs.readFileSync(this.codeownersFilePath).toString().split('\n');
@@ -53,7 +67,7 @@ function Codeowners(currentPath) {
     ownerEntries.push({
       path: pathString,
       usernames: usernames,
-      match: ownerMatcher(pathString)
+      match: ownerMatcher(pathString),
     });
   }
 
