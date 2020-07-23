@@ -53,8 +53,9 @@ program
   .command('audit')
   .description('list the owners for all files')
   .option('-u, --unowned', 'unowned files only')
+  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
   .action(options => {
-    const codeowners = new Codeowners(rootPath);
+    const codeowners = new Codeowners(rootPath, options.codeOwnersFilename);
 
     walk(rootPath, ['.git', 'node_modules'], (err, files) => {
       if (err) {

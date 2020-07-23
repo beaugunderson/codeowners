@@ -5,7 +5,7 @@ interface Codeowners {
    * folder of the cwd.
    * @param cwd current directory, defaults to process.cwd()
    */
-  new (cwd?: string): CodeownersFile;
+  new(cwd?: string, fileName?: string): CodeownersFile;
 }
 
 interface CodeownersFile {
