@@ -7,6 +7,7 @@ const fs = require('fs');
 const ignore = require('ignore');
 const maxBy = require('lodash.maxby');
 const padEnd = require('lodash.padend');
+const intersection = require('lodash.intersection');
 const path = require('path');
 const program = require('commander');
 
@@ -42,7 +43,7 @@ function walk(dir, excludedFiles, done) {
 // TODO make a command-line option, and find .git
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', {cwd: rootPath});
+const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {
@@ -85,6 +86,33 @@ program
         }
       });
     });
+  });
+
+program
+  .command("verify <path>")
+  .description("verify ownership of a specific path")
+  .requiredOption('-u, --users <users...>', 'verify ownership by these users or teams')
+  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
+  .action((path, options) => {
+    // instantiate new Codeowners obj
+    const codeowners = new Codeowners(rootPath, options.codeOwnersFilename);
+
+    // call getOwner() on `path`
+    const owners = codeowners.getOwner(path);
+
+    // check if any `users` are in the results of getOwner()
+    const verifiedOwners = intersection(options.users, owners);
+
+    // if verifiedOwners is empty, exit with error
+    if (verifiedOwners.length < 1) {
+      console.log(`None of the users/teams specified own the path ${path}`);
+      process.exit(1);
+    }
+
+    // print owners
+    for (let currOwner of verifiedOwners) {
+      console.log(`${path}    ${currOwner}`);
+    }
   });
 
 if (!process.argv.slice(2).length) {
