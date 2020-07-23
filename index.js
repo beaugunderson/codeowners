@@ -56,7 +56,7 @@ program
   .option('-u, --unowned', 'unowned files only')
   .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
   .action(options => {
-    const codeowners = new Codeowners(rootPath, options.codeOwnersFilename);
+    const codeowners = new Codeowners(rootPath, options.codeownersFilename);
 
     walk(rootPath, ['.git', 'node_modules'], (err, files) => {
       if (err) {
@@ -95,7 +95,7 @@ program
   .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
   .action((path, options) => {
     // instantiate new Codeowners obj
-    const codeowners = new Codeowners(rootPath, options.codeOwnersFilename);
+    const codeowners = new Codeowners(rootPath, options.codeownersFilename);
 
     // call getOwner() on `path`
     const owners = codeowners.getOwner(path);
