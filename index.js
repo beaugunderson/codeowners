@@ -89,11 +89,10 @@ program
   });
 
 program
-  .command("verify <path>")
-  .description("verify ownership of a specific path")
-  .requiredOption('-u, --users <users...>', 'verify ownership by these users or teams')
+  .command("verify <path> <users...>")
+  .description("verify users/teams own a specific path")
   .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
-  .action((path, options) => {
+  .action((path, users, options) => {
     // instantiate new Codeowners obj
     const codeowners = new Codeowners(rootPath, options.codeownersFilename);
 
@@ -101,7 +100,7 @@ program
     const owners = codeowners.getOwner(path);
 
     // check if any `users` are in the results of getOwner()
-    const verifiedOwners = intersection(options.users, owners);
+    const verifiedOwners = intersection(users, owners);
 
     // if verifiedOwners is empty, exit with error
     if (verifiedOwners.length < 1) {
