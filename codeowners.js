@@ -13,14 +13,14 @@ function ownerMatcher(pathString) {
   return matcher.ignores.bind(matcher);
 }
 
-function Codeowners(currentPath, fileName = "CODEOWNERS") {
+function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   if (!currentPath) {
     currentPath = process.cwd();
   }
 
   this.codeownersFilePath = trueCasePath(findUp.sync([
     `.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`
-  ], { cwd: currentPath }));
+  ], {cwd: currentPath}));
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
   // We might have found a bare codeowners file or one inside the three supported subdirectories.

@@ -40,10 +40,9 @@ function walk(dir, excludedFiles, done) {
   });
 }
 
-// TODO make a command-line option, and find .git
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
+const gitignorePath = findUp.sync('.gitignore', {cwd: rootPath});
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {
@@ -54,7 +53,7 @@ program
   .command('audit')
   .description('list the owners for all files')
   .option('-u, --unowned', 'unowned files only')
-  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
+  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', 'CODEOWNERS')
   .action(options => {
     const codeowners = new Codeowners(rootPath, options.codeownersFilename);
 
@@ -89,9 +88,9 @@ program
   });
 
 program
-  .command("verify <path> <users...>")
-  .description("verify users/teams own a specific path")
-  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', "CODEOWNERS")
+  .command('verify <path> <users...>')
+  .description('verify users/teams own a specific path')
+  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', 'CODEOWNERS')
   .action((path, users, options) => {
     // instantiate new Codeowners obj
     const codeowners = new Codeowners(rootPath, options.codeownersFilename);
