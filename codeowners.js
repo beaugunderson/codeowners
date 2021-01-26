@@ -38,7 +38,7 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
     throw new Error(`Found a ${fileName} but it's a directory: ${this.codeownersFilePath}`);
   }
 
-  const lines = fs.readFileSync(this.codeownersFilePath).toString().split('\n');
+  const lines = fs.readFileSync(this.codeownersFilePath).toString().split(/\r\n|\r|\n/);
   const ownerEntries = [];
 
   for (const line of lines) {
