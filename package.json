@@ -1,6 +1,6 @@
 {
   "name": "codeowners",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "A tool for working with CODEOWNERS files",
   "main": "codeowners.js",
   "types": "codeowners.d.ts",
