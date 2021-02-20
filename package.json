@@ -21,14 +21,14 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "commander": "^6.0.0",
+    "commander": "^6.2.1",
     "find-up": "^2.1.0",
-    "ignore": "^3.3.3",
+    "ignore": "^3.3.10",
     "is-directory": "^0.3.1",
     "lodash.intersection": "^4.4.0",
     "lodash.maxby": "^4.6.0",
     "lodash.padend": "^4.6.1",
-    "true-case-path": "^1.0.2",
+    "true-case-path": "^1.0.3",
     "walk": "^2.3.14"
   },
   "devDependencies": {
