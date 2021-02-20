@@ -28,12 +28,16 @@
     "lodash.intersection": "^4.4.0",
     "lodash.maxby": "^4.6.0",
     "lodash.padend": "^4.6.1",
-    "true-case-path": "^1.0.2"
+    "true-case-path": "^1.0.2",
+    "walk": "^2.3.14"
   },
   "devDependencies": {
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1"
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.2.1"
   },
   "repository": {
     "type": "git",

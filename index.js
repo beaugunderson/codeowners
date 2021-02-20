@@ -1,42 +1,18 @@
 #!/usr/bin/env node
+
+/* eslint-disable no-console */
 // @ts-check
 
 const findUp = require('find-up');
 const fs = require('fs');
 const ignore = require('ignore');
-const maxBy = require('lodash.maxby');
-const padEnd = require('lodash.padend');
 const intersection = require('lodash.intersection');
+const padEnd = require('lodash.padend');
 const path = require('path');
 const program = require('commander');
+const walk = require('walk');
 
 const Codeowners = require('./codeowners.js');
-
-// https://stackoverflow.com/a/5827895
-function walk(dir, excludedFiles, done) {
-  let results = [];
-  fs.readdir(dir, (err, list) => {
-    if (err) return done(err);
-    list = list.filter((file) => !excludedFiles.includes(file));
-    let pending = list.length;
-    if (!pending) return done(null, results);
-
-    list.forEach((file) => {
-      file = path.resolve(dir, file);
-      fs.stat(file, (err, stat) => {
-        if (stat && stat.isDirectory()) {
-          walk(file, excludedFiles, (err, res) => {
-            results = results.concat(res);
-            if (!--pending) done(null, results);
-          });
-        } else {
-          results.push(file);
-          if (!--pending) done(null, results);
-        }
-      });
-    });
-  });
-}
 
 const rootPath = process.cwd();
 
@@ -51,63 +27,115 @@ program
   .command('audit')
   .description('list the owners for all files')
   .option('-u, --unowned', 'unowned files only')
-  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', 'CODEOWNERS')
+  .option('-w, --width <columns>', 'how much should filenames be padded?', '32')
+  .option(
+    '-c, --codeowners-filename <codeowners_filename>',
+    'specify CODEOWNERS filename',
+    'CODEOWNERS'
+  )
   .action((options) => {
     const codeowners = new Codeowners(rootPath, options.codeownersFilename);
+    const padding = parseInt(options.width, 10);
 
-    walk(rootPath, ['.git', 'node_modules'], (err, files) => {
-      if (err) {
-        console.error(err);
+    const walker = walk.walk(rootPath, { filters: ['.git', 'node_modules'] });
 
-        process.exit(1);
+    // walker.on("names", (root, nodeNamesArray) => {
+    //   nodeNamesArray.sort((a, b) => {
+    //     if (a > b) return 1;
+    //     if (a < b) return -1;
+    //     return 0;
+    //   });
+    // });
+
+    // walker.on("directories", (root, dirStatsArray, next) => {
+    //   next();
+    // });
+
+    // walker.on("directories", (root, dirStatsArray, next) => {
+    //   console.log({ dirStatsArray })
+
+    //   const sorted = dirStatsArray
+    //     .filter(stats => stats.isFile())
+    //     .sort((a, b) => a < b ? -1 : 1);
+
+    //   // const relativeFiles = files.map((file) => path.relative(codeowners.codeownersDirectory, file));
+    //   // const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
+    //   // const maxLength = maxBy(filteredFiles, (file) => file.length).length;
+
+    //   sorted.forEach((file) => {
+    //   });
+
+    //   next();
+
+    //   // for (const stats of dirStatsArray) {
+    //   //   if (!stats.isFile()) {
+    //   //     continue;
+    //   //   }
+    //   // }
+
+    //   // next();
+    // });
+
+    walker.on('file', (root, fileStats, next) => {
+      const rooted = path.join(root, fileStats.name);
+      const relative = path.relative(codeowners.codeownersDirectory, rooted);
+      const owners = codeowners.getOwner(relative);
+
+      if (options.unowned) {
+        if (!owners.length) {
+          console.log(relative);
+        }
+      } else {
+        let printedOwner = 'nobody';
+
+        if (owners.length) {
+          printedOwner = owners.join(' ');
+        }
+
+        console.log(`${padEnd(relative, padding)}    ${printedOwner}`);
       }
 
-      files.sort();
+      next();
+    });
 
-      const relativeFiles = files.map((file) => path.relative(codeowners.codeownersDirectory, file));
-      const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
-      const maxLength = maxBy(filteredFiles, (file) => file.length).length;
-
-      filteredFiles.forEach((file) => {
-        const owners = codeowners.getOwner(file);
-        if (options.unowned) {
-          if (!owners.length) {
-            return console.log(file);
-          }
-        } else {
-          let printedOwner = 'nobody';
-          if (owners.length) {
-            printedOwner = owners.join(' ');
-          }
-          console.log(`${padEnd(file, maxLength)}    ${printedOwner}`);
+    walker.on('errors', (root, nodeStatsArray, next) => {
+      for (const stats of nodeStatsArray) {
+        if (stats.error) {
+          console.error(`Error: ${stats.error}`);
         }
-      });
+      }
+
+      next();
     });
   });
 
 program
   .command('verify <path> <users...>')
   .description('verify users/teams own a specific path')
-  .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', 'CODEOWNERS')
-  .action((path, users, options) => {
+  .option(
+    '-c, --codeowners-filename <codeowners_filename>',
+    'specify CODEOWNERS filename',
+    'CODEOWNERS'
+  )
+  .action((checkPath, users, options) => {
     // instantiate new Codeowners obj
     const codeowners = new Codeowners(rootPath, options.codeownersFilename);
 
     // call getOwner() on `path`
-    const owners = codeowners.getOwner(path);
+    const owners = codeowners.getOwner(checkPath);
 
     // check if any `users` are in the results of getOwner()
     const verifiedOwners = intersection(users, owners);
 
     // if verifiedOwners is empty, exit with error
     if (verifiedOwners.length < 1) {
-      console.log(`None of the users/teams specified own the path ${path}`);
+      console.log(`None of the users/teams specified own the path ${checkPath}`);
       process.exit(1);
     }
 
     // print owners
     for (const currOwner of verifiedOwners) {
-      console.log(`${path}    ${currOwner}`);
+      console.log(`${checkPath}    ${currOwner}`);
     }
   });
 
