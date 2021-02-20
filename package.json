@@ -30,7 +30,11 @@
     "lodash.padend": "^4.6.1",
     "true-case-path": "^1.0.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beaugunderson/codeowners.git"

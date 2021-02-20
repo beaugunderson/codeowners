@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 // @ts-check
-'use strict';
 
 const findUp = require('find-up');
 const fs = require('fs');
@@ -17,13 +16,12 @@ const Codeowners = require('./codeowners.js');
 function walk(dir, excludedFiles, done) {
   let results = [];
   fs.readdir(dir, (err, list) => {
-
     if (err) return done(err);
-    list = list.filter(file => !excludedFiles.includes(file));
+    list = list.filter((file) => !excludedFiles.includes(file));
     let pending = list.length;
     if (!pending) return done(null, results);
 
-    list.forEach(file => {
+    list.forEach((file) => {
       file = path.resolve(dir, file);
       fs.stat(file, (err, stat) => {
         if (stat && stat.isDirectory()) {
@@ -42,7 +40,7 @@ function walk(dir, excludedFiles, done) {
 
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', {cwd: rootPath});
+const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {
@@ -54,7 +52,7 @@ program
   .description('list the owners for all files')
   .option('-u, --unowned', 'unowned files only')
   .option('-c, --codeowners-filename <codeowners_filename>', 'specify CODEOWNERS filename', 'CODEOWNERS')
-  .action(options => {
+  .action((options) => {
     const codeowners = new Codeowners(rootPath, options.codeownersFilename);
 
     walk(rootPath, ['.git', 'node_modules'], (err, files) => {
@@ -66,12 +64,12 @@ program
 
       files.sort();
 
-      const relativeFiles = files.map(file => path.relative(codeowners.codeownersDirectory, file));
+      const relativeFiles = files.map((file) => path.relative(codeowners.codeownersDirectory, file));
       const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
-      const maxLength = maxBy(filteredFiles, file => file.length).length;
+      const maxLength = maxBy(filteredFiles, (file) => file.length).length;
 
-      filteredFiles.forEach(file => {
-        let owners = codeowners.getOwner(file);
+      filteredFiles.forEach((file) => {
+        const owners = codeowners.getOwner(file);
         if (options.unowned) {
           if (!owners.length) {
             return console.log(file);
@@ -108,7 +106,7 @@ program
     }
 
     // print owners
-    for (let currOwner of verifiedOwners) {
+    for (const currOwner of verifiedOwners) {
       console.log(`${path}    ${currOwner}`);
     }
   });

@@ -1,5 +1,4 @@
 // @ts-check
-'use strict';
 
 const findUp = require('find-up');
 const fs = require('fs');
@@ -19,8 +18,8 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   }
 
   this.codeownersFilePath = trueCasePath(findUp.sync([
-    `.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`
-  ], {cwd: currentPath}));
+    `.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`,
+  ], { cwd: currentPath }));
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
   // We might have found a bare codeowners file or one inside the three supported subdirectories.
@@ -54,8 +53,8 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
 
     ownerEntries.push({
       path: pathString,
-      usernames: usernames,
-      match: ownerMatcher(pathString)
+      usernames,
+      match: ownerMatcher(pathString),
     });
   }
 
