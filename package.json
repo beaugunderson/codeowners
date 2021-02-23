@@ -1,11 +1,11 @@
 {
   "name": "codeowners",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "A tool for working with CODEOWNERS files",
   "main": "codeowners.js",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "./index.js"
+    "codeowners": "index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
