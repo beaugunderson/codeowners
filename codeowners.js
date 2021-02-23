@@ -15,12 +15,16 @@ function ownerMatcher(pathString) {
 function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   const pathOrCwd = currentPath || process.cwd();
 
-  this.codeownersFilePath = trueCasePath(
-    findUp.sync(
-      [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
-      { cwd: pathOrCwd }
-    )
+  const codeownersPath = findUp.sync(
+    [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
+    { cwd: pathOrCwd }
   );
+
+  if (!codeownersPath) {
+    throw new Error(`Could not find a CODEOWNERS file`);
+  }
+
+  this.codeownersFilePath = trueCasePath(codeownersPath);
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
 
