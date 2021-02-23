@@ -34,47 +34,18 @@ program
     'CODEOWNERS'
   )
   .action((options) => {
-    const codeowners = new Codeowners(rootPath, options.codeownersFilename);
+    let codeowners;
+
+    try {
+      codeowners = new Codeowners(rootPath, options.codeownersFilename);
+    } catch (e) {
+      console.error(e.message);
+      process.exit(1);
+    }
+
     const padding = parseInt(options.width, 10);
 
     const walker = walk.walk(rootPath, { filters: ['.git', 'node_modules'] });
-
-    // walker.on("names", (root, nodeNamesArray) => {
-    //   nodeNamesArray.sort((a, b) => {
-    //     if (a > b) return 1;
-    //     if (a < b) return -1;
-    //     return 0;
-    //   });
-    // });
-
-    // walker.on("directories", (root, dirStatsArray, next) => {
-    //   next();
-    // });
-
-    // walker.on("directories", (root, dirStatsArray, next) => {
-    //   console.log({ dirStatsArray })
-
-    //   const sorted = dirStatsArray
-    //     .filter(stats => stats.isFile())
-    //     .sort((a, b) => a < b ? -1 : 1);
-
-    //   // const relativeFiles = files.map((file) => path.relative(codeowners.codeownersDirectory, file));
-    //   // const filteredFiles = relativeFiles.filter(gitignoreMatcher.createFilter()).sort();
-    //   // const maxLength = maxBy(filteredFiles, (file) => file.length).length;
-
-    //   sorted.forEach((file) => {
-    //   });
-
-    //   next();
-
-    //   // for (const stats of dirStatsArray) {
-    //   //   if (!stats.isFile()) {
-    //   //     continue;
-    //   //   }
-    //   // }
-
-    //   // next();
-    // });
 
     walker.on('file', (root, fileStats, next) => {
       const rooted = path.join(root, fileStats.name);
@@ -118,8 +89,15 @@ program
     'CODEOWNERS'
   )
   .action((checkPath, users, options) => {
+    let codeowners;
+
     // instantiate new Codeowners obj
-    const codeowners = new Codeowners(rootPath, options.codeownersFilename);
+    try {
+      codeowners = new Codeowners(rootPath, options.codeownersFilename);
+    } catch (e) {
+      console.error(e.message);
+      process.exit(1);
+    }
 
     // call getOwner() on `path`
     const owners = codeowners.getOwner(checkPath);
