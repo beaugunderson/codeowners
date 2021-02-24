@@ -57,11 +57,7 @@ program
           console.log(relative);
         }
       } else {
-        let printedOwner = 'nobody';
-
-        if (owners.length) {
-          printedOwner = owners.join(' ');
-        }
+        const printedOwner = owners.length ? owners.join(' ') : 'nobody';
 
         console.log(`${padEnd(relative, padding)}    ${printedOwner}`);
       }
