@@ -72,15 +72,13 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
 }
 
 Codeowners.prototype.getOwner = function getOwner(filePath) {
-  let owners = [];
-
   for (const entry of this.ownerEntries) {
     if (entry.match(filePath)) {
-      owners = entry.usernames;
+      return entry.usernames;
     }
   }
 
-  return owners.slice();
+  return [];
 };
 
 module.exports = Codeowners;
