@@ -10,7 +10,7 @@ const intersection = require('lodash.intersection');
 const padEnd = require('lodash.padend');
 const path = require('path');
 const program = require('commander');
-const walk = require('walk');
+const { walkStream } = require('@nodelib/fs.walk');
 
 const Codeowners = require('./codeowners.js');
 
@@ -45,11 +45,17 @@ program
 
     const padding = parseInt(options.width, 10);
 
-    const walker = walk.walk(rootPath, { filters: ['.git', 'node_modules'] });
+    const stream = walkStream(rootPath, {
+      filter: (entry) => !entry.path.startsWith('node_modules') && !entry.path.startsWith('.git'),
+      errorFilter: (error) =>
+        error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'EPERM',
+    });
 
-    walker.on('file', (root, fileStats, next) => {
-      const rooted = path.join(root, fileStats.name);
-      const relative = path.relative(codeowners.codeownersDirectory, rooted);
+    stream.on('data', (file) => {
+      const relative = path
+        .relative(codeowners.codeownersDirectory, file.path)
+        .replace(/(\r)/g, '\\r');
+
       const owners = codeowners.getOwner(relative);
 
       if (options.unowned) {
@@ -57,22 +63,14 @@ program
           console.log(relative);
         }
       } else {
-        const printedOwner = owners.length ? owners.join(' ') : 'nobody';
-
-        console.log(`${padEnd(relative, padding)}    ${printedOwner}`);
+        console.log(
+          `${padEnd(relative, padding)}    ${owners.length ? owners.join(' ') : 'nobody'}`
+        );
       }
-
-      next();
     });
 
-    walker.on('errors', (root, nodeStatsArray, next) => {
-      for (const stats of nodeStatsArray) {
-        if (stats.error) {
-          console.error(`Error: ${stats.error}`);
-        }
-      }
-
-      next();
+    stream.on('error', (err) => {
+      console.error(err);
     });
   });
 

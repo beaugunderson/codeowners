@@ -21,6 +21,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@nodelib/fs.walk": "^1.2.6",
     "commander": "^6.2.1",
     "find-up": "^2.1.0",
     "ignore": "^3.3.10",
@@ -28,8 +29,7 @@
     "lodash.intersection": "^4.4.0",
     "lodash.maxby": "^4.6.0",
     "lodash.padend": "^4.6.1",
-    "true-case-path": "^1.0.3",
-    "walk": "^2.3.14"
+    "true-case-path": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "^7.20.0",

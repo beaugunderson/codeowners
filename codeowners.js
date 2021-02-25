@@ -71,6 +71,8 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   this.ownerEntries = ownerEntries;
 }
 
+const EMPTY_ARRAY = [];
+
 Codeowners.prototype.getOwner = function getOwner(filePath) {
   for (const entry of this.ownerEntries) {
     if (entry.match(filePath)) {
@@ -78,7 +80,7 @@ Codeowners.prototype.getOwner = function getOwner(filePath) {
     }
   }
 
-  return [];
+  return EMPTY_ARRAY;
 };
 
 module.exports = Codeowners;
