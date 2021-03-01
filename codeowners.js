@@ -68,7 +68,9 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
     });
   }
 
-  this.ownerEntries = ownerEntries;
+  // reverse the owner entries to search from bottom to top
+  // the last matching pattern takes the most precedence
+  this.ownerEntries = ownerEntries.reverse();
 }
 
 const EMPTY_ARRAY = [];
