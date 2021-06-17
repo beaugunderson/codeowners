@@ -46,7 +46,10 @@ program
     const padding = parseInt(options.width, 10);
 
     const stream = walkStream(rootPath, {
-      deepFilter: (entry) => !entry.path.startsWith('node_modules') && !entry.path.startsWith('.git'),
+      deepFilter: (entry) => {
+        const split = entry.path.split(path.sep);
+        return !split.includes('node_modules') && !split.includes('.git');
+      },
       errorFilter: (error) =>
         error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'EPERM',
     });
