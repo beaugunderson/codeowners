@@ -12,11 +12,13 @@ function ownerMatcher(pathString) {
   return matcher.ignores.bind(matcher);
 }
 
+const PARENT_FOLDERS = ['.github', '.gitlab', 'docs'];
+
 function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   const pathOrCwd = currentPath || process.cwd();
 
   const codeownersPath = findUp.sync(
-    [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
+    PARENT_FOLDERS.map((folder) => path.join(folder, fileName)).concat(fileName),
     { cwd: pathOrCwd }
   );
 
@@ -30,7 +32,7 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
 
   // We might have found a bare codeowners file or one inside the three supported subdirectories.
   // In the latter case the project root is up another level.
-  if (this.codeownersDirectory.match(/\/(.github|.gitlab|docs)$/i)) {
+  if (PARENT_FOLDERS.includes(path.basename(this.codeownersDirectory))) {
     this.codeownersDirectory = path.dirname(this.codeownersDirectory);
   }
 
