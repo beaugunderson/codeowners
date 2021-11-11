@@ -8,7 +8,7 @@
     "codeowners": "index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "keywords": [
     "codeowners",
@@ -24,8 +24,9 @@
     "@nodelib/fs.walk": "^1.2.6",
     "commander": "^6.2.1",
     "find-up": "^2.1.0",
-    "ignore": "^3.3.10",
+    "ignore": "^5.1.9",
     "is-directory": "^0.3.1",
+    "jest": "^27.3.1",
     "lodash.intersection": "^4.4.0",
     "lodash.maxby": "^4.6.0",
     "lodash.padend": "^4.6.1",

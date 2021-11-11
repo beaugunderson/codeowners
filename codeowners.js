@@ -8,7 +8,7 @@ const path = require('path');
 const trueCasePath = require('true-case-path');
 
 function ownerMatcher(pathString) {
-  const matcher = ignore().add(pathString);
+  const matcher = ignore({ignorecase: false}).add(pathString);
   return matcher.ignores.bind(matcher);
 }
 
