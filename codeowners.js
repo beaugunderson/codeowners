@@ -78,7 +78,7 @@ const EMPTY_ARRAY = [];
 Codeowners.prototype.getOwner = function getOwner(filePath) {
   for (const entry of this.ownerEntries) {
     if (entry.match(filePath)) {
-      return entry.usernames;
+      return [...entry.usernames];
     }
   }
 
