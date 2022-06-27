@@ -15,4 +15,8 @@ describe('codeowners', () => {
     const owner = repos.getOwner(__filename);
     expect(owner).toEqual(['@beaugunderson']);
   });
+
+  it('respects inline comments', () => {
+    expect(repos.ownerEntries[0].comment).toEqual(" I own the whole project!")
+  });
 });
