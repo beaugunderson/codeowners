@@ -21,7 +21,7 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   );
 
   if (!codeownersPath) {
-    throw new Error(`Could not find a CODEOWNERS file`);
+    throw new Error(`Could not find a ${fileName} file`);
   }
 
   this.codeownersFilePath = trueCasePath(codeownersPath);
