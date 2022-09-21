@@ -1,18 +1,20 @@
 {
   "name": "codeowners",
-  "version": "4.0.0",
+  "version": "5.1.1",
   "description": "A tool for working with CODEOWNERS files",
   "main": "codeowners.js",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "./index.js"
+    "codeowners": "index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "lint": "eslint --ext *.js"
   },
   "keywords": [
     "codeowners",
-    "github"
+    "github",
+    "gitlab"
   ],
   "contributors": [
     "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
@@ -20,16 +22,25 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "commander": "^2.11.0",
+    "@nodelib/fs.walk": "^1.2.6",
+    "commander": "^6.2.1",
     "find-up": "^2.1.0",
-    "ignore": "^3.3.3",
+    "ignore": "^3.3.10",
     "is-directory": "^0.3.1",
+    "lodash.intersection": "^4.4.0",
     "lodash.maxby": "^4.6.0",
     "lodash.padend": "^4.6.1",
-    "recursive-readdir": "^2.2.1",
-    "true-case-path": "^1.0.2"
+    "true-case-path": "^1.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^27.5.1",
+    "prettier": "^2.2.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beaugunderson/codeowners.git"

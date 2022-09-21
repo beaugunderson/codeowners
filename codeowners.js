@@ -1,5 +1,4 @@
 // @ts-check
-'use strict';
 
 const findUp = require('find-up');
 const fs = require('fs');
@@ -13,30 +12,42 @@ function ownerMatcher(pathString) {
   return matcher.ignores.bind(matcher);
 }
 
-function Codeowners(currentPath) {
-  if (!currentPath) {
-    currentPath = process.cwd();
+function Codeowners(currentPath, fileName = 'CODEOWNERS') {
+  const pathOrCwd = currentPath || process.cwd();
+
+  const codeownersPath = findUp.sync(
+    [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
+    { cwd: pathOrCwd }
+  );
+
+  if (!codeownersPath) {
+    throw new Error(`Could not find a CODEOWNERS file`);
   }
 
-  this.codeownersFilePath = trueCasePath(findUp.sync(['.github/CODEOWNERS', 'docs/CODEOWNERS', 'CODEOWNERS'], { cwd: currentPath }));
+  this.codeownersFilePath = trueCasePath(codeownersPath);
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
-  // We might have found a bare codeowners file or one inside the two supported subdirectories.
+
+  // We might have found a bare codeowners file or one inside the three supported subdirectories.
   // In the latter case the project root is up another level.
-  if (this.codeownersDirectory.match(/\/(.github|docs)$/i)) {
+  if (this.codeownersDirectory.match(/\/(.github|.gitlab|docs)$/i)) {
     this.codeownersDirectory = path.dirname(this.codeownersDirectory);
   }
+
   const codeownersFile = path.basename(this.codeownersFilePath);
 
-  if (codeownersFile !== 'CODEOWNERS') {
-    throw new Error(`Found a CODEOWNERS file but it was lower-cased: ${this.codeownersFilePath}`);
+  if (codeownersFile !== fileName) {
+    throw new Error(`Found a ${fileName} file but it was lower-cased: ${this.codeownersFilePath}`);
   }
 
   if (isDirectory.sync(this.codeownersFilePath)) {
-    throw new Error(`Found a CODEOWNERS but it's a directory: ${this.codeownersFilePath}`);
+    throw new Error(`Found a ${fileName} but it's a directory: ${this.codeownersFilePath}`);
   }
 
-  const lines = fs.readFileSync(this.codeownersFilePath).toString().split('\n');
+  const lines = fs
+    .readFileSync(this.codeownersFilePath)
+    .toString()
+    .split(/\r\n|\r|\n/);
   const ownerEntries = [];
 
   for (const line of lines) {
@@ -52,22 +63,26 @@ function Codeowners(currentPath) {
 
     ownerEntries.push({
       path: pathString,
-      usernames: usernames,
-      match: ownerMatcher(pathString)
+      usernames,
+      match: ownerMatcher(pathString),
     });
   }
 
-  this.ownerEntries = ownerEntries;
+  // reverse the owner entries to search from bottom to top
+  // the last matching pattern takes the most precedence
+  this.ownerEntries = ownerEntries.reverse();
 }
 
-Codeowners.prototype.getOwner = function (filePath) {
-  let owners = [];
+const EMPTY_ARRAY = [];
+
+Codeowners.prototype.getOwner = function getOwner(filePath) {
   for (const entry of this.ownerEntries) {
     if (entry.match(filePath)) {
-      owners = entry.usernames;
+      return [...entry.usernames];
     }
   }
-  return owners.slice();
-}
+
+  return EMPTY_ARRAY;
+};
 
 module.exports = Codeowners;

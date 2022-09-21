@@ -18,10 +18,10 @@ interface Codeowners {
 declare const Codeowners: {
   /**
    * Searches upwards for a codeowners file either in a direct
-   * parent or within a docs/ or .github/ folder in a parent
+   * parent or within a docs/ or .github/ or .gitlab/ folder in a parent
    * folder of the cwd.
    * @param cwd current directory, defaults to process.cwd()
    */
-  new(cwd?: string): Codeowners;
+  new (cwd?: string, fileName?: string): Codeowners;
 };
 export = Codeowners;

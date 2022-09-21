@@ -25,6 +25,17 @@ To find a list of files not covered by the `CODEOWNERS` in the project:
 $ codeowners audit --unowned
 ```
 
+Specify a non-standard CODEOWNERS filename
+
+```sh
+$ codeowners audit -c CODEKEEPERS
+```
+
+Verify users/teams own a specific path
+```sh
+$ codeowners verify src/ @foob_ar @contoso/engineers
+```
+
 ## library usage
 
 ```js
@@ -34,3 +45,12 @@ const Codeowners = require('codeowners');
 const repos = new Codeowners(workingDir);
 repos.getOwner('path/to/file.js'); // => array of owner strings, e.g. ['@noahm']
 ```
+
+## CHANGELOG
+
+### 5.0.0
+
+- Much-improved performance
+- Removal of automatic column width calculation
+- Addition of `-w/--width` option for manual column width
+  - Or use e.g. `codeowners audit | column -ts "    "`
