@@ -13,6 +13,6 @@ module.exports = {
     'no-continue': 'off',
     'no-plusplus': 'off',
     'no-restricted-syntax': 'off',
-    'prettier/prettier': ['error'],
+    'prettier/prettier': ['error', require('./prettierrc')],
   },
 };

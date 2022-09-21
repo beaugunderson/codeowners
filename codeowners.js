@@ -7,30 +7,42 @@ const isDirectory = require('is-directory');
 const path = require('path');
 const trueCasePath = require('true-case-path');
 
+const ContactInfo = require('./contact-info');
+
 function ownerMatcher(pathString) {
   const matcher = ignore().add(pathString);
   return matcher.ignores.bind(matcher);
 }
 
-function Codeowners(currentPath, fileName = 'CODEOWNERS') {
-  const pathOrCwd = currentPath || process.cwd();
+const PARENT_FOLDERS = ['.github', '.gitlab', 'docs'];
+const CODEOWNERS = 'CODEOWNERS';
 
-  const codeownersPath = findUp.sync(
-    [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
-    { cwd: pathOrCwd }
-  );
-
-  if (!codeownersPath) {
-    throw new Error(`Could not find a CODEOWNERS file`);
+/**
+ * @param {string=} currentPath defaults to process.cwd()
+ * @param {string=} fileName of file to find, defaults to CODEOWNERS
+ */
+function Codeowners(currentPath, fileName = CODEOWNERS) {
+  if (!currentPath) {
+    currentPath = process.cwd();
   }
 
-  this.codeownersFilePath = trueCasePath(codeownersPath);
+  const contactInfo = new ContactInfo();
+
+  this.codeownersFilePath = trueCasePath(
+    findUp.sync(PARENT_FOLDERS.map((folder) => path.join(folder, fileName)).concat(fileName), {
+      cwd: currentPath,
+    })
+  );
+
+  if (!this.codeownersFilePath) {
+    throw new Error(`Could not find a CODEOWNERS file`);
+  }
 
   this.codeownersDirectory = path.dirname(this.codeownersFilePath);
 
   // We might have found a bare codeowners file or one inside the three supported subdirectories.
   // In the latter case the project root is up another level.
-  if (this.codeownersDirectory.match(/\/(.github|.gitlab|docs)$/i)) {
+  if (PARENT_FOLDERS.includes(path.basename(this.codeownersDirectory))) {
     this.codeownersDirectory = path.dirname(this.codeownersDirectory);
   }
 
@@ -49,13 +61,20 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
     .toString()
     .split(/\r\n|\r|\n/);
   const ownerEntries = [];
+  const pathsByOwner = {};
 
   for (const line of lines) {
     if (!line) {
       continue;
     }
 
+    if (line.startsWith('##')) {
+      contactInfo.addLine(line);
+      continue;
+    }
+
     if (line.startsWith('#')) {
+      // ignore comment
       continue;
     }
 
@@ -66,11 +85,19 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
       usernames,
       match: ownerMatcher(pathString),
     });
+    for (const owner of usernames) {
+      if (!pathsByOwner[owner]) {
+        pathsByOwner[owner] = [];
+      }
+      pathsByOwner[owner].push(pathString);
+    }
   }
 
   // reverse the owner entries to search from bottom to top
   // the last matching pattern takes the most precedence
   this.ownerEntries = ownerEntries.reverse();
+  this.contactInfo = contactInfo.owners;
+  this.pathsByOwner = pathsByOwner;
 }
 
 const EMPTY_ARRAY = [];
@@ -83,6 +110,13 @@ Codeowners.prototype.getOwner = function getOwner(filePath) {
   }
 
   return EMPTY_ARRAY;
+};
+
+Codeowners.prototype.getPathsForOwner = function (owner) {
+  if (this.pathsByOwner[owner]) {
+    return this.pathsByOwner[owner].slice();
+  }
+  return [];
 };
 
 module.exports = Codeowners;

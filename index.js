@@ -23,6 +23,19 @@ if (gitignorePath) {
   gitignoreMatcher.add(fs.readFileSync(gitignorePath).toString());
 }
 
+program.description('@nmann/codeowners cli');
+
+program
+  .command('of <file> [otherFiles...]')
+  .description('list the owner of specific files')
+  .action((singleFile, otherFiles) => {
+    const codeowners = new Codeowners(rootPath);
+    console.log(singleFile, ...codeowners.getOwner(singleFile));
+    for (const file of otherFiles) {
+      console.log(file, ...codeowners.getOwner(file));
+    }
+  });
+
 program
   .command('audit')
   .description('list the owners for all files')
@@ -65,6 +78,9 @@ program
       let relative = path
         .relative(codeowners.codeownersDirectory, file.path)
         .replace(/(\r)/g, '\\r');
+      if (gitignoreMatcher.ignores(relative)) {
+        return;
+      }
 
       let owners = codeowners.getOwner(relative);
 

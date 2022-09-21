@@ -1,5 +1,5 @@
 {
-  "name": "codeowners",
+  "name": "@nmann/codeowners",
   "version": "5.1.1",
   "description": "A tool for working with CODEOWNERS files",
   "main": "codeowners.js",
@@ -28,11 +28,11 @@
     "ignore": "^3.3.10",
     "is-directory": "^0.3.1",
     "lodash.intersection": "^4.4.0",
-    "lodash.maxby": "^4.6.0",
     "lodash.padend": "^4.6.1",
     "true-case-path": "^1.0.3"
   },
   "devDependencies": {
+    "@types/node": "^14.7.8",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^7.2.0",
@@ -43,10 +43,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beaugunderson/codeowners.git"
+    "url": "git+https://github.com/noahm/codeowners.git"
   },
   "bugs": {
-    "url": "https://github.com/beaugunderson/codeowners/issues"
+    "url": "https://github.com/noahm/codeowners/issues"
   },
-  "homepage": "https://github.com/beaugunderson/codeowners#readme"
+  "homepage": "https://github.com/noahm/codeowners#readme"
 }

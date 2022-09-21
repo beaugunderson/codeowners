@@ -7,12 +7,22 @@ interface Codeowners {
    * The assumed project directory root for paths within the codeowners file
    */
   readonly codeownersDirectory: string;
+  /**
+   * Object built from space delimited table of contact info prefixed by '##'
+   */
+  readonly contactInfo: Array<Record<string, string>>;
 
   /**
    * Get a list of owner(s) for a given file/folder path
    * @param filePath relative to the codeownersDirectory
    */
   getOwner(filePath: string): string[];
+
+  /**
+   * Get a list of paths owned by a given user or team
+   * @param owner team or user name
+   */
+  getPathsForOwner(owner: string): string[];
 }
 
 declare const Codeowners: {
