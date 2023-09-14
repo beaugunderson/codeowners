@@ -1,19 +1,71 @@
-# codeowners
+# @nmann/codeowners
 
-A tool for interacting with GitHub's
+[![npm](https://img.shields.io/npm/v/@nmann/codeowners)](https://www.npmjs.com/package/@nmann/codeowners)
+
+A library and CLI for interacting with GitHub's
 [CODEOWNERS](https://help.github.com/articles/about-codeowners/) files.
 
-Usable as a CLI, or as a library.
+It extends GitHubs's file format to to use the CODEOWNERS file as a source of truth for metadata about teams. This is useful for quick reference to things like preferred contact channels, JIRA project names, etc.
 
-## installation
+This metadata can be made even easier to access with [a companion VS Code extension](https://marketplace.visualstudio.com/items?itemName=noahm.codeowners-extended).
 
-```sh
-$ npm install -g codeowners
+## Library usage
+
+```js
+const Codeowners = require('@nmann/codeowners');
+
+// defaults to process.cwd(), but can pass a different directory path to constructor
+const owners = new Codeowners();
+owners.getOwner('path/to/file.js'); // returns array of one or more owners, e.g. ['@noahm']
 ```
 
-## cli usage
+### Team metadata
+
+This library will attempt to parse out contact info for teams if listed in a simple space-separated-values format.
+Only contiguous lines beginning with a double-pound "##" will be parsed.
+
+The first line is a space-separated list of column names, and the following lines provide values for those columns, one line per team.
+
+Example team metadata block:
+
+```sh
+## team slack-channel engineering-manager jira-project-key
+## @org/admins #project-admins @alice ADMIN
+## @org/design #design @bob DESIGN
+## @org/monetization #monetization-eng @charlie MONEY
+
+# ... regular codeowners file contents ...
+```
+
+This info is parsed and made available in an array of structured objects on the `contactInfo` field of a codeowners class instance:
+
+```js
+[
+  {
+    team: '@org/admins',
+    'slack-channel': '#project-admins',
+    'engineering-manager': '@alice',
+    'jira-project-key': 'ADMIN',
+  },
+  {
+    team: '@org/design',
+    'slack-channel': '#design',
+    'engineering-manager': '@bob',
+    'jira-project-key': 'DESIGN',
+  },
+  {
+    team: '@org/monetization',
+    'slack-channel': '#monetization-eng',
+    'engineering-manager': '@charlie',
+    'jira-project-key': 'MONEY',
+  },
+];
+```
+
+## CLI usage
 
 Find the owner(s) of a given file or files:
+
 ```sh
 $ codeowners of some/file.ts [...otherfiles]
 ```
@@ -37,54 +89,7 @@ $ codeowners audit -c CODEKEEPERS
 ```
 
 Verify users/teams own a specific path
+
 ```sh
 $ codeowners verify src/ @foob_ar @contoso/engineers
 ```
-
-## library usage
-
-```js
-const Codeowners = require('codeowners');
-
-// defaults to process.cwd(), but can pass a different directory path to constructor
-const owners = new Codeowners();
-owners.getOwner('path/to/file.js'); // => array of owner strings, e.g. ['@noahm']
-```
-
-Also has support for parsing out contact info for teams if listed in a space-separated-values format.
-Any number of arbitrary columns and headers can be used, but only lines beginning with "##" will be used.
-```
-# Team Contact Info
-# Double pound characters are special signifiers of contact metadata.
-## team slack-channel engineering-manager jira-project-key
-## @twilight/bits #bits @bitsmanager BITS
-## @twilight/bounty-board #bounty-board @janesmith BB
-```
-
-```js
-owners.contactInfo
-// => array of info objects indexed by column name
-[
-  {
-    team: '@twilight/bits',
-    'slack-channel': '#bits',
-    'engineering-manager': '@bitsmanager',
-    'jira-project-key': 'BITS'
-  },
-  {
-    team: '@twilight/bounty-board',
-    'slack-channel': '#bounty-board',
-    'engineering-manager': '@janesmith',
-    'jira-project-key': 'BB'
-  }
-]
-```
-
-## CHANGELOG
-
-### 5.0.0
-
-- Much-improved performance
-- Removal of automatic column width calculation
-- Addition of `-w/--width` option for manual column width
-  - Or use e.g. `codeowners audit | column -ts "    "`
