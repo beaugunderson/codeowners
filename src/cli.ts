@@ -1,33 +1,29 @@
 #!/usr/bin/env node
 
-/* eslint-disable no-console */
-// @ts-check
+import fs from "fs";
+import path from "path";
+import { walkStream } from "@nodelib/fs.walk";
+import { program } from "commander";
+import { findUpSync } from "find-up";
+import ignore from "ignore";
 
-const findUp = require('find-up');
-const fs = require('fs');
-const ignore = require('ignore');
-const intersection = require('lodash.intersection');
-const padEnd = require('lodash.padend');
-const path = require('path');
-const program = require('commander');
-const { walkStream } = require('@nodelib/fs.walk');
-
-const Codeowners = require('./codeowners.js');
+import { Codeowners } from "./codeowners";
+import { intersection, padEnd } from "./utils";
 
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
+const gitignorePath = findUpSync(".gitignore", { cwd: rootPath });
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {
   gitignoreMatcher.add(fs.readFileSync(gitignorePath).toString());
 }
 
-program.description('@nmann/codeowners cli');
+program.description("@nmann/codeowners cli");
 
 program
-  .command('of <file> [otherFiles...]')
-  .description('list the owner of specific files')
+  .command("of <file> [otherFiles...]")
+  .description("list the owner of specific files")
   .action((singleFile, otherFiles) => {
     const codeowners = new Codeowners(rootPath);
     console.log(singleFile, ...codeowners.getOwner(singleFile));
@@ -37,27 +33,27 @@ program
   });
 
 program
-  .command('audit')
-  .description('list the owners for all files')
-  .option('-u, --unowned', 'unowned files only')
+  .command("audit")
+  .description("list the owners for all files")
+  .option("-u, --unowned", "unowned files only")
   .option(
-    '-d, --min-depth <n>',
-    'roll up unowned files to common paths, but to a minimum depth (only works for unowned)',
-    parseInt
+    "-d, --min-depth <n>",
+    "roll up unowned files to common paths, but to a minimum depth (only works for unowned)",
+    parseInt,
   )
-  .option('-w, --width <columns>', 'how much should filenames be padded?', '32')
+  .option("-w, --width <columns>", "how much should filenames be padded?", "32")
   .option(
-    '-c, --codeowners-filename <codeowners_filename>',
-    'specify CODEOWNERS filename',
-    'CODEOWNERS'
+    "-c, --codeowners-filename <codeowners_filename>",
+    "specify CODEOWNERS filename",
+    "CODEOWNERS",
   )
   .action((options) => {
-    let codeowners;
+    let codeowners: Codeowners;
 
     try {
       codeowners = new Codeowners(rootPath, options.codeownersFilename);
     } catch (e) {
-      console.error(e.message);
+      console.error((e as Error).message);
       process.exit(1);
     }
 
@@ -67,17 +63,17 @@ program
       deepFilter: (entry) => {
         const split = entry.path.split(path.sep);
         return (
-          !split.includes('node_modules') && !split.includes('.git') && !split.includes('.cache')
+          !split.includes("node_modules") && !split.includes(".git") && !split.includes(".cache")
         );
       },
       errorFilter: (error) =>
-        error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'EPERM',
+        error.code === "ENOENT" || error.code === "EACCES" || error.code === "EPERM",
     });
 
-    stream.on('data', (file) => {
+    stream.on("data", (file) => {
       let relative = path
         .relative(codeowners.codeownersDirectory, file.path)
-        .replace(/(\r)/g, '\\r');
+        .replace(/(\r)/g, "\\r");
       if (gitignoreMatcher.ignores(relative)) {
         return;
       }
@@ -101,26 +97,26 @@ program
           console.log(relative);
         }
       } else {
-        let printedOwner = 'nobody';
+        let printedOwner = "nobody";
         if (owners.length) {
-          printedOwner = owners.join(' ');
+          printedOwner = owners.join(" ");
         }
         console.log(`${padEnd(relative, padding)}    ${printedOwner}`);
       }
     });
 
-    stream.on('error', (err) => {
+    stream.on("error", (err) => {
       console.error(err);
     });
   });
 
 program
-  .command('verify <path> <users...>')
-  .description('verify users/teams own a specific path')
+  .command("verify <path> <users...>")
+  .description("verify users/teams own a specific path")
   .option(
-    '-c, --codeowners-filename <codeowners_filename>',
-    'specify CODEOWNERS filename',
-    'CODEOWNERS'
+    "-c, --codeowners-filename <codeowners_filename>",
+    "specify CODEOWNERS filename",
+    "CODEOWNERS",
   )
   .action((checkPath, users, options) => {
     let codeowners;
@@ -129,7 +125,7 @@ program
     try {
       codeowners = new Codeowners(rootPath, options.codeownersFilename);
     } catch (e) {
-      console.error(e.message);
+      console.error((e as Error).message);
       process.exit(1);
     }
 

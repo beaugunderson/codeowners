@@ -1,0 +1,8 @@
+.github
+.vscode
+test
+biome.json
+bun.lockb
+CODEOWNERS
+tsconfig.json
+*.tgz

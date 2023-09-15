@@ -1,0 +1,28 @@
+name: Status Checks
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: All status checks
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Typecheck
+        run: bunx tsc --noEmit
+
+      - name: Unit Tests
+        run: bun test
+
+      - name: Lint (Biome)
+        run: bun run lint
+      
+      - name: Build (tsup)
+        run: bun run build
+      
+      - name: Are the types wrong?
+        run: bun attw

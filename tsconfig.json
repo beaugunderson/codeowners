@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "ESNext"
+    ],
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "outDir": "dist",
+    "declaration": true,
+    "noEmit": true,
+    "strict": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "bun-types" // add Bun global
+    ]
+  },
+  "include": [
+    "./src/*",
+    "./test/*"
+  ]
+}

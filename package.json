@@ -1,45 +1,43 @@
 {
   "name": "@nmann/codeowners",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A tool for working with CODEOWNERS files",
-  "main": "codeowners.js",
-  "types": "codeowners.d.ts",
+  "type": "module",
+  "main": "./dist/codeowners.js",
+  "types": "./dist/codeowners.d.ts",
   "bin": {
-    "codeowners": "index.js"
+    "codeowners": "./dist/cli.js"
   },
   "scripts": {
-    "test": "jest",
-    "lint": "eslint --ext *.js"
+    "build": "tsup",
+    "lint": "biome ci src test",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
+    "attw": "attw . --pack --ignore-rules cjs-resolves-to-esm"
   },
-  "keywords": [
-    "codeowners",
-    "github",
-    "gitlab"
-  ],
+  "keywords": ["codeowners", "github", "gitlab"],
   "contributors": [
     "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
     "Noah Manneschmidt (https://noah.manneschmidt.net/)"
   ],
   "license": "MIT",
   "dependencies": {
-    "@nodelib/fs.walk": "^1.2.6",
-    "commander": "^6.2.1",
-    "find-up": "^2.1.0",
+    "@nodelib/fs.walk": "^2.0.0",
+    "commander": "^11.0.0",
+    "find-up": "^6.0.0",
     "ignore": "^3.3.10",
-    "is-directory": "^0.3.1",
-    "lodash.intersection": "^4.4.0",
-    "lodash.padend": "^4.6.1",
-    "true-case-path": "^1.0.3"
+    "true-case-path": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node": "^14.7.8",
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^27.5.1",
-    "prettier": "^2.2.1"
+    "@arethetypeswrong/cli": "^0.10.2",
+    "@biomejs/biome": "1.1.2",
+    "@types/node": "^18.0.0",
+    "bun-types": "latest",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.0"
+  },
+  "engines": {
+    "node": ">=16.17.0"
   },
   "repository": {
     "type": "git",

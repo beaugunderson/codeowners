@@ -21,8 +21,7 @@ owners.getOwner('path/to/file.js'); // returns array of one or more owners, e.g.
 
 ### Team metadata
 
-This library will attempt to parse out contact info for teams if listed in a simple space-separated-values format.
-Only contiguous lines beginning with a double-pound "##" will be parsed.
+This library will attempt to parse out contact info for teams if listed in a simple space-separated-values format. Only lines beginning with a double-pound "##" will be parsed.
 
 The first line is a space-separated list of column names, and the following lines provide values for those columns, one line per team.
 
