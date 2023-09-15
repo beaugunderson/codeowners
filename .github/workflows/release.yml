@@ -32,7 +32,6 @@ jobs:
         with:
           node-version: 20
           registry-url: "https://registry.npmjs.org"
-          cache: "yarn"
       - uses: oven-sh/setup-bun@v1
       - name: Install Dependencies
         run: bun install
