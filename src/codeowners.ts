@@ -1,7 +1,7 @@
-import { findUpSync } from "find-up";
-import ignore from "ignore";
 import fs from "node:fs";
 import path from "node:path";
+import { findUpSync } from "find-up";
+import ignore from "ignore";
 import { trueCasePathSync } from "true-case-path";
 
 import { ContactInfo } from "./contact-info";

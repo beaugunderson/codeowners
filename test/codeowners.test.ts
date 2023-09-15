@@ -1,4 +1,5 @@
 import { describe, expect, it } from "bun:test";
+
 import { Codeowners } from "../src/codeowners";
 
 const repos = new Codeowners();

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import { walkStream } from "@nodelib/fs.walk";
 import { program } from "commander";
 import { findUpSync } from "find-up";
