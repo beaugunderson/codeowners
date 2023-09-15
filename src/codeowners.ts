@@ -21,6 +21,10 @@ interface OwnerEntry {
   match(pathname: string): boolean;
 }
 
+interface ReadOnlyDict<T> {
+  readonly [key: string]: T | undefined;
+}
+
 /**
  * @param currentPath defaults to process.cwd()
  * @param fileName of file to find, defaults to CODEOWNERS

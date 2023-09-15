@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.1
+
+- Fix: write standalone definition for bun's `ReadOnlyDict` type
+
 ## v2.0.0
 
 - **BREAKING** Package is now ESM, the `Codeowners` class is both a named and default export
