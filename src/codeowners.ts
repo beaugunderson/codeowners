@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
 import { findUpSync } from "find-up";
 import ignore from "ignore";
+import fs from "node:fs";
+import path from "node:path";
 import { trueCasePathSync } from "true-case-path";
 
 import { ContactInfo } from "./contact-info";
@@ -18,7 +18,7 @@ const CODEOWNERS = "CODEOWNERS";
 interface OwnerEntry {
   path: string;
   usernames: string[];
-  match: Function;
+  match(pathname: string): boolean;
 }
 
 /**
@@ -86,11 +86,13 @@ export class Codeowners {
       }
 
       const [pathString, ...usernames] = line.split(/\s+/);
-
+      const matcher = ownerMatcher(pathString);
       this.ownerEntries.push({
         path: pathString,
         usernames,
-        match: ownerMatcher(pathString),
+        match(pathname) {
+          return matcher(path.relative(currentPath, pathname));
+        },
       });
       for (const owner of usernames) {
         if (!this.pathsByOwner[owner]) {
