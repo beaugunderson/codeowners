@@ -1,0 +1,16 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`metadata parses metadata 1`] = `
+[
+  {
+    "ice-cream-flavor": "strawberry",
+    "owner": "@noahm",
+    "timezone": "PST",
+  },
+  {
+    "ice-cream-flavor": "chocolate",
+    "owner": "@amoose136",
+    "timezone": "EST",
+  },
+]
+`;
