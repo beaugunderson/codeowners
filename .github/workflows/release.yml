@@ -1,0 +1,44 @@
+name: Publish to NPM
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+      - name: Install Dependencies
+        run: bun install
+      - name: Typecheck
+        run: bunx tsc --noEmit
+      - name: Unit Tests
+        run: bun test
+      - name: Lint (Biome)
+        run: bun run lint
+      - name: Build (tsup)
+        run: bun run build
+      - name: Are the types wrong?
+        run: bun attw
+
+  publish:
+    needs: checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: "https://registry.npmjs.org"
+          cache: "yarn"
+      - uses: oven-sh/setup-bun@v1
+      - name: Install Dependencies
+        run: bun install
+      - name: Build
+        run: bun run build
+      - name: Publish to NPM
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
