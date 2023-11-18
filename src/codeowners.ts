@@ -72,7 +72,10 @@ export class Codeowners {
       throw new Error(`Found a ${fileName} but it's a directory: ${this.codeownersFilePath}`);
     }
 
-    const lines = fs.readFileSync(this.codeownersFilePath).toString().split(/\r\n|\r|\n/);
+    const lines = fs
+      .readFileSync(this.codeownersFilePath)
+      .toString()
+      .split(/\r\n|\r|\n/);
 
     for (const line of lines) {
       if (!line) {
