@@ -11,6 +11,7 @@
   "scripts": {
     "build": "tsup",
     "lint": "biome ci src test",
+    "format": "biome format --write src test",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
     "attw": "attw . --pack --ignore-rules cjs-resolves-to-esm"
