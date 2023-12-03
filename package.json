@@ -25,7 +25,7 @@
   "dependencies": {
     "@nodelib/fs.walk": "^2.0.0",
     "commander": "^11.0.0",
-    "find-up": "^6.0.0",
+    "find-up": "^7.0.0",
     "ignore": "^5.0.0",
     "true-case-path": "^2.0.0"
   },
