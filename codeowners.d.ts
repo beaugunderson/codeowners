@@ -1,4 +1,4 @@
-interface Codeowners {
+export interface Codeowners {
   /**
    * Searches upwards for a codeowners file either in a direct
    * parent or within a docs/ or .github/ or .gitlab/ folder in a parent
@@ -8,7 +8,7 @@ interface Codeowners {
   new(cwd?: string, fileName?: string): CodeownersFile;
 }
 
-interface CodeownersFile {
+export interface CodeownersFile {
   /**
    * The codeowners file found as a parent of the cwd
    */
@@ -25,5 +25,4 @@ interface CodeownersFile {
   getOwner(filePath: string): string[];
 }
 
-declare const co: Codeowners;
-export = co;
+export const co: Codeowners;
