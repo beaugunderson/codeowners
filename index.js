@@ -50,6 +50,9 @@ program
         const split = entry.path.split(path.sep);
         return !split.includes('node_modules') && !split.includes('.git') && !split.includes('.cache');
       },
+      entryFilter: (entry) => {
+        return !gitignoreMatcher.ignores(entry.path);
+      },
       errorFilter: (error) =>
         error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'EPERM',
     });
