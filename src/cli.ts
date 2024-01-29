@@ -119,7 +119,7 @@ program
     "CODEOWNERS",
   )
   .action((checkPath, users, options) => {
-    let codeowners;
+    let codeowners: Codeowners;
 
     // instantiate new Codeowners obj
     try {
