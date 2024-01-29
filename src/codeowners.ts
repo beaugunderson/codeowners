@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { findUpSync } from "find-up";
 import ignore from "ignore";
-import { trueCasePathSync } from "true-case-path";
+import * as tcp from "true-case-path";
 
 import { ContactInfo } from "./contact-info";
 import { isDirectorySync } from "./utils";
@@ -51,7 +51,7 @@ export class Codeowners {
       throw new Error("Could not find a CODEOWNERS file");
     }
 
-    this.codeownersFilePath = trueCasePathSync(foundPath);
+    this.codeownersFilePath = tcp.trueCasePathSync(foundPath);
     this.codeownersDirectory = path.dirname(this.codeownersFilePath);
 
     // We might have found a bare codeowners file or one inside the three supported subdirectories.
