@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.2
+
+- Fix: import style used for `true-case-path` broke when using Node's esm mode directly
+
 ## v2.0.1
 
 - Fix: write standalone definition for bun's `ReadOnlyDict` type
