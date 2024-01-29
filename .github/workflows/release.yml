@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1.1.0
+      - uses: oven-sh/setup-bun@v1.1.1
       - name: Install Dependencies
         run: bun install
       - name: Typecheck
@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 20
           registry-url: "https://registry.npmjs.org"
-      - uses: oven-sh/setup-bun@v1.1.0
+      - uses: oven-sh/setup-bun@v1.1.1
       - name: Install Dependencies
         run: bun install
       - name: Build
