@@ -30,7 +30,7 @@
     "true-case-path": "^2.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.14.0",
+    "@arethetypeswrong/cli": "^0.15.0",
     "@biomejs/biome": "1.5.3",
     "@types/node": "^20.0.0",
     "bun-types": "latest",
