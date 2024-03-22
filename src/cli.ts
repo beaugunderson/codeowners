@@ -39,7 +39,7 @@ program
   .option(
     "-d, --min-depth <n>",
     "roll up unowned files to common paths, but to a minimum depth (only works for unowned)",
-    parseInt,
+    Number.parseInt,
   )
   .option("-w, --width <columns>", "how much should filenames be padded?", "32")
   .option(
@@ -57,7 +57,7 @@ program
       process.exit(1);
     }
 
-    const padding = parseInt(options.width, 10);
+    const padding = Number.parseInt(options.width, 10);
 
     const stream = walkStream(rootPath, {
       deepFilter: (entry) => {
