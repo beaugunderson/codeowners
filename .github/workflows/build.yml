@@ -7,7 +7,7 @@ jobs:
     name: All status checks
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1.2.0
+      - uses: oven-sh/setup-bun@v1
 
       - name: Install Dependencies
         run: bun install
