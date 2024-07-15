@@ -27,6 +27,7 @@ program
   .command('audit')
   .description('list the owners for all files')
   .option('-u, --unowned', 'unowned files only')
+  .option('-i, --include-ignored', 'include files in .gitignore (excluded by default)')
   .option('-w, --width <columns>', 'how much should filenames be padded?', '32')
   .option(
     '-c, --codeowners-filename <codeowners_filename>',
@@ -60,6 +61,14 @@ program
         .replace(/(\r)/g, '\\r');
 
       const owners = codeowners.getOwner(relative);
+
+      if (!options.includeIgnored && gitignorePath) {
+        const relativePath = path.relative(gitignorePath, file.path);
+
+        if (gitignoreMatcher.ignores(relativePath)) {
+          return;
+        }
+      }
 
       if (options.unowned) {
         if (!owners.length) {
