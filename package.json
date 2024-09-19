@@ -16,7 +16,11 @@
     "typecheck": "tsc --noEmit",
     "attw": "attw . --pack --ignore-rules cjs-resolves-to-esm"
   },
-  "keywords": ["codeowners", "github", "gitlab"],
+  "keywords": [
+    "codeowners",
+    "github",
+    "gitlab"
+  ],
   "contributors": [
     "Beau Gunderson <beau@beaugunderson.com> (https://beaugunderson.com/)",
     "Noah Manneschmidt (https://noah.manneschmidt.net/)"
@@ -30,8 +34,8 @@
     "true-case-path": "^2.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.15.0",
-    "@biomejs/biome": "1.7.0",
+    "@arethetypeswrong/cli": "^0.16.0",
+    "@biomejs/biome": "^1.9.0",
     "@types/node": "^20.0.0",
     "bun-types": "latest",
     "tsup": "^8.0.0",
