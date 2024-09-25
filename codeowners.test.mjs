@@ -1,11 +1,11 @@
 /* global describe it expect */
-const Codeowners = require('./codeowners.js');
+import Codeowners from './codeowners.mjs';
 
 const repos = new Codeowners();
 
 describe('codeowners', () => {
-  it(`returns owners for ${__filename}`, () => {
-    const owner = repos.getOwner(__filename);
+  it('returns owners for this file', () => {
+    const owner = repos.getOwner('codeowners.test.mjs');
     expect(owner).toEqual(['@beaugunderson']);
   });
 
@@ -20,9 +20,9 @@ describe('codeowners', () => {
   });
 
   it('owners is a copy of internal data', () => {
-    repos.getOwner(__filename).pop();
+    repos.getOwner('codeowners.test.mjs').pop();
 
-    const owner = repos.getOwner(__filename);
+    const owner = repos.getOwner('codeowners.test.mjs');
     expect(owner).toEqual(['@beaugunderson']);
   });
 });

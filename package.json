@@ -2,14 +2,24 @@
   "name": "codeowners",
   "version": "5.1.2",
   "description": "A tool for working with CODEOWNERS files",
-  "main": "codeowners.js",
+  "jest": {
+    "transform": {},
+    "testMatch": [ 
+      "**/spec/**/*.js?(x)",
+      "**/?(*.)(spec|test).js?(x)",
+      "**/spec/**/*.mjs",
+      "**/?(*.)(spec|test).mjs"
+    ]
+  },
+  "type": "module",
+  "main": "codeowners.mjs",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "index.js"
+    "codeowners": "index.mjs"
   },
   "scripts": {
-    "test": "jest",
-    "lint": "eslint --ext *.js"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "lint": "eslint --ext *.mjs"
   },
   "keywords": [
     "codeowners",
