@@ -19,6 +19,11 @@ describe('codeowners', () => {
     expect(owner).toEqual(['@example', '@beaugunderson']);
   });
 
+  it('allows definition of minimum owners requiring approval', () => {
+    const owner = repos.getOwner('index.mjs');
+    expect(owner).toEqual(['@example-section-owner', '@beaugunderson']);
+  });
+
   it('owners is a copy of internal data', () => {
     repos.getOwner('codeowners.test.mjs').pop();
 

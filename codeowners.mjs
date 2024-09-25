@@ -4,6 +4,8 @@ import path from 'path';
 import ignore from 'ignore';
 import isDirectory from 'is-directory';
 
+const SECTION_REGEX = /\[([^\]]*)\](?:\[(\d+)\])?([^#]*)(?:#(.*))?/;
+
 /**
  * @param {string} pathString the path to match
  * @returns {function(): boolean}
@@ -54,14 +56,10 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   let currentSection = { name: null, owners: [], entries: [] };
 
   for (const line of lines) {
-    if (line.startsWith('[')) {
-      const endingBracket = line.indexOf(']');
-      const name = line.substring(1, endingBracket);
-      const owners = line
-        .substring(endingBracket + 1, line.length)
-        .trim()
-        .split(/\s+/)
-        .filter((v) => v.length);
+    if (SECTION_REGEX.test(line)) {
+      const groups = SECTION_REGEX.exec(line);
+      const name = groups[1];
+      const owners = (groups[3] || '').split(/\s+/).filter((v) => v.length);
 
       ownerSections.push(currentSection);
       currentSection = { name, owners, entries: [] };

@@ -5,3 +5,6 @@ README.md
 
 [Another Section]
 package.json @example
+
+[Still Another Section][2] @example-section-owner
+index.mjs
