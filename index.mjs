@@ -3,20 +3,19 @@
 /* eslint-disable no-console */
 // @ts-check
 
-const findUp = require('find-up');
-const fs = require('fs');
-const ignore = require('ignore');
-const intersection = require('lodash.intersection');
-const padEnd = require('lodash.padend');
-const path = require('path');
-const program = require('commander');
-const { walkStream } = require('@nodelib/fs.walk');
-
-const Codeowners = require('./codeowners.js');
+import { findUpSync } from 'find-up';
+import * as fs from 'fs';
+import ignore from 'ignore';
+import intersection from 'lodash.intersection';
+import padEnd from 'lodash.padend';
+import path from 'path';
+import { program } from 'commander';
+import { walkStream } from '@nodelib/fs.walk';
+import Codeowners from './codeowners.mjs';
 
 const rootPath = process.cwd();
 
-const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
+const gitignorePath = findUpSync('.gitignore', { cwd: rootPath });
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {
@@ -31,7 +30,7 @@ program
   .option(
     '-c, --codeowners-filename <codeowners_filename>',
     'specify CODEOWNERS filename',
-    'CODEOWNERS'
+    'CODEOWNERS',
   )
   .action((options) => {
     let codeowners;
@@ -48,7 +47,9 @@ program
     const stream = walkStream(rootPath, {
       deepFilter: (entry) => {
         const split = entry.path.split(path.sep);
-        return !split.includes('node_modules') && !split.includes('.git') && !split.includes('.cache');
+        return (
+          !split.includes('node_modules') && !split.includes('.git') && !split.includes('.cache')
+        );
       },
       errorFilter: (error) =>
         error.code === 'ENOENT' || error.code === 'EACCES' || error.code === 'EPERM',
@@ -67,7 +68,7 @@ program
         }
       } else {
         console.log(
-          `${padEnd(relative, padding)}    ${owners.length ? owners.join(' ') : 'nobody'}`
+          `${padEnd(relative, padding)}    ${owners.length ? owners.join(' ') : 'nobody'}`,
         );
       }
     });
@@ -83,7 +84,7 @@ program
   .option(
     '-c, --codeowners-filename <codeowners_filename>',
     'specify CODEOWNERS filename',
-    'CODEOWNERS'
+    'CODEOWNERS',
   )
   .action((checkPath, users, options) => {
     let codeowners;
