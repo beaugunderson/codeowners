@@ -3,7 +3,7 @@
 /* eslint-disable no-console */
 // @ts-check
 
-const { findUpSync } = require('find-up');
+const { findup } = require('find-up');
 const fs = require('fs');
 const ignore = require('ignore');
 const intersection = require('lodash.intersection');
@@ -15,7 +15,7 @@ const Codeowners = require('./codeowners.js');
 
 const rootPath = process.cwd();
 
-const gitignorePath = findUpSync('.gitignore', { cwd: rootPath });
+const gitignorePath = findup.sync('.gitignore', { cwd: rootPath });
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {

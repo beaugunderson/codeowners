@@ -1,4 +1,4 @@
-const { findUpSync } = require('find-up');
+const { findup } = require('find-up');
 const fs = require('fs');
 const path = require('path');
 const ignore = require('ignore');
@@ -16,7 +16,7 @@ function ownerMatcher(pathString) {
 function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   const pathOrCwd = currentPath || process.cwd();
 
-  this.codeownersFilePath = findUpSync(
+  this.codeownersFilePath = findup.sync(
     [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
     { cwd: pathOrCwd },
   );
