@@ -1,8 +1,8 @@
-import { findUpSync } from 'find-up';
-import fs from 'fs';
-import ignore from 'ignore';
-import isDirectory from 'is-directory';
-import path from 'path';
+const { findUpSync } = require('find-up');
+const fs = require('fs');
+const path = require('path');
+const ignore = require('ignore');
+const isDirectory = require('is-directory');
 
 /**
  * @param {string} pathString the path to match
@@ -13,7 +13,7 @@ function ownerMatcher(pathString) {
   return matcher.ignores.bind(matcher);
 }
 
-export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
+function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   const pathOrCwd = currentPath || process.cwd();
 
   this.codeownersFilePath = findUpSync(
@@ -96,3 +96,5 @@ Codeowners.prototype.getOwner = function getOwner(filePath) {
 
   return owners;
 };
+
+module.exports = Codeowners;

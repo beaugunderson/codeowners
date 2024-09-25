@@ -1,15 +1,8 @@
 /* global describe it expect */
-import path from 'path';
-import { fileURLToPath } from 'url';
-import Codeowners from './codeowners.mjs';
+const Codeowners = require('./codeowners.js');
 
 const repos = new Codeowners();
-// eslint-disable-next-line no-underscore-dangle
-const __filename = ((metaUrl) => {
-  const filename = fileURLToPath(metaUrl);
-  const dirname = path.dirname(filename);
-  return filename.substring(dirname.length + 1);
-})(import.meta.url);
+
 
 describe('codeowners', () => {
   it(`returns owners for ${__filename}`, () => {
