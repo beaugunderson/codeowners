@@ -94,7 +94,7 @@ Codeowners.prototype.getOwner = function getOwner(filePath) {
     }
   }
 
-  return owners;
+  return [...new Set(owners)];
 };
 
 module.exports = Codeowners;
