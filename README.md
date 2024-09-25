@@ -48,6 +48,9 @@ repos.getOwner('path/to/file.js'); // => array of owner strings, e.g. ['@noahm']
 
 ## CHANGELOG
 
+### 5.1.2
+- Added code to support the Default Owners feature of GitLab
+
 ### 5.0.0
 
 - Much-improved performance
