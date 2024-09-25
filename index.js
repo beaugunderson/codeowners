@@ -3,19 +3,20 @@
 /* eslint-disable no-console */
 // @ts-check
 
-const { findup } = require('find-up');
+const findUp = require('find-up');
 const fs = require('fs');
 const ignore = require('ignore');
 const intersection = require('lodash.intersection');
 const padEnd = require('lodash.padend');
 const path = require('path');
-const { program } = require('commander');
+const program = require('commander');
 const { walkStream } = require('@nodelib/fs.walk');
+
 const Codeowners = require('./codeowners.js');
 
 const rootPath = process.cwd();
 
-const gitignorePath = findup.sync('.gitignore', { cwd: rootPath });
+const gitignorePath = findUp.sync('.gitignore', { cwd: rootPath });
 const gitignoreMatcher = ignore();
 
 if (gitignorePath) {
