@@ -2,14 +2,14 @@
   "name": "codeowners",
   "version": "5.1.2",
   "description": "A tool for working with CODEOWNERS files",
-  "main": "codeowners.mjs",
+  "main": "codeowners.js",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "index.mjs"
+    "codeowners": "index.js"
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint --ext *.mjs"
+    "lint": "eslint --ext *.js"
   },
   "keywords": [
     "codeowners",

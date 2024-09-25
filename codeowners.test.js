@@ -3,7 +3,6 @@ const Codeowners = require('./codeowners.js');
 
 const repos = new Codeowners();
 
-
 describe('codeowners', () => {
   it(`returns owners for ${__filename}`, () => {
     const owner = repos.getOwner(__filename);
