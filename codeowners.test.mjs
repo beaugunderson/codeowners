@@ -24,6 +24,16 @@ describe('codeowners', () => {
     expect(owner).toEqual(['@example-section-owner', '@beaugunderson']);
   });
 
+  it('allows inline comments', () => {
+    const owner = repos.getOwner('package-lock.json');
+    expect(owner).toEqual(['@example-inline-comment-owner', '@beaugunderson']);
+  });
+
+  it('allows paths with spaces', () => {
+    const owner = repos.getOwner('a path with spaces/and subdirectories/index.mjs');
+    expect(owner).toEqual(['@beaugunderson', '@jasonsperske']);
+  });
+
   it('owners is a copy of internal data', () => {
     repos.getOwner('codeowners.test.mjs').pop();
 

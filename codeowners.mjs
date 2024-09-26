@@ -5,6 +5,7 @@ import ignore from 'ignore';
 import isDirectory from 'is-directory';
 
 const SECTION_REGEX = /\[([^\]]*)\](?:\[(\d+)\])?([^#]*)(?:#(.*))?/;
+const ENTRY_REGEX = /^((?:\\\s|[^\s])*)\s?([^#]*)(#.*)?$/
 
 /**
  * @param {string} pathString the path to match
@@ -65,14 +66,19 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
       currentSection = { name, owners, entries: [] };
       continue;
     }
+    if (ENTRY_REGEX.test(line)) {
+      const groups = ENTRY_REGEX.exec(line);
+      const pathString = groups[1].replace(/\\\s/g, ' ');
+      const usernames = (groups[2] || '').split(/\s+/).filter((v) => v.length);
 
-    const [pathString, ...usernames] = line.split(/\s+/).filter((v) => v.length);
-
-    currentSection.entries.push({
-      path: pathString,
-      usernames: [...usernames, ...currentSection.owners],
-      match: ownerMatcher(pathString),
-    });
+      currentSection.entries.push({
+        path: pathString,
+        usernames: [...usernames, ...currentSection.owners],
+        match: ownerMatcher(pathString),
+      })
+      continue;
+    }
+    console.error(`Could not parse line: ${line}`);
   }
 
   ownerSections.push(currentSection);

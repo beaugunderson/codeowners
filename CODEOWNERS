@@ -1,5 +1,7 @@
 * @beaugunderson
 
+a\ path\ with\ spaces/and\ subdirectories/ @jasonsperske
+
 [Test Default Section] @jasonsperske
 README.md
 
@@ -7,4 +9,7 @@ README.md
 package.json @example
 
 [Still Another Section][2] @example-section-owner
-index.mjs
+/index.mjs
+
+[Test Inline Comments] @example-inline-comment-owner # section comment
+package-lock.json # inline comment

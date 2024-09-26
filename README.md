@@ -48,6 +48,9 @@ repos.getOwner('path/to/file.js'); // => array of owner strings, e.g. ['@noahm']
 
 ## CHANGELOG
 
+### 5.1.3
+- Added support for entries with escaped spaces, and inline comments
+
 ### 5.1.2
 - Added code to support the Default Owners feature of GitLab
 
