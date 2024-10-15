@@ -1,1 +1,22 @@
 * @beaugunderson
+
+a\ path\ with\ spaces/and\ subdirectories/ @jasonsperske
+
+[Test Default Section] @jasonsperske
+README.md
+
+[Another Section]
+package.json @example
+
+[Still Another Section][2] @example-section-owner
+/index.mjs
+
+[Test Inline Comments] @example-inline-comment-owner # section comment
+package-lock.json # inline comment
+
+[A Section With an Override] @example-override-group-owner
+codeowners.mjs @example-override-file-owner
+codeowners.d.ts
+
+[A orphaned section]
+/orphaned-file.md

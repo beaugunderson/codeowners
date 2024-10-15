@@ -1,15 +1,25 @@
 {
   "name": "codeowners",
-  "version": "5.1.1",
+  "version": "5.1.4",
   "description": "A tool for working with CODEOWNERS files",
-  "main": "codeowners.js",
+  "jest": {
+    "transform": {},
+    "testMatch": [ 
+      "**/spec/**/*.js?(x)",
+      "**/?(*.)(spec|test).js?(x)",
+      "**/spec/**/*.mjs",
+      "**/?(*.)(spec|test).mjs"
+    ]
+  },
+  "type": "module",
+  "main": "codeowners.mjs",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "index.js"
+    "codeowners": "index.mjs"
   },
   "scripts": {
-    "test": "jest",
-    "lint": "eslint --ext *.js"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest",
+    "lint": "eslint --ext *.mjs"
   },
   "keywords": [
     "codeowners",
@@ -29,17 +39,16 @@
     "is-directory": "^0.3.1",
     "lodash.intersection": "^4.4.0",
     "lodash.maxby": "^4.6.0",
-    "lodash.padend": "^4.6.1",
-    "true-case-path": "^1.0.3"
+    "lodash.padend": "^4.6.1"
   },
   "devDependencies": {
-    "eslint": "^7.20.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^27.5.1",
-    "prettier": "^2.2.1"
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3"
   },
   "repository": {
     "type": "git",
