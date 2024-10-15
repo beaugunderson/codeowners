@@ -13,3 +13,10 @@ package.json @example
 
 [Test Inline Comments] @example-inline-comment-owner # section comment
 package-lock.json # inline comment
+
+[A Section With an Override] @example-override-group-owner
+codeowners.mjs @example-override-file-owner
+codeowners.d.ts
+
+[A orphaned section]
+/orphaned-file.md

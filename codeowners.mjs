@@ -1,11 +1,11 @@
-import findUp from 'find-up';
-import fs from 'fs';
-import path from 'path';
-import ignore from 'ignore';
-import isDirectory from 'is-directory';
+import findUp from "find-up";
+import fs from "fs";
+import path from "path";
+import ignore from "ignore";
+import isDirectory from "is-directory";
 
 const SECTION_REGEX = /\[([^\]]*)\](?:\[(\d+)\])?([^#]*)(?:#(.*))?/;
-const ENTRY_REGEX = /^((?:\\\s|[^\s])*)\s?([^#]*)(#.*)?$/
+const ENTRY_REGEX = /^((?:\\\s|[^\s])*)\s?([^#]*)(#.*)?$/;
 
 /**
  * @param {string} pathString the path to match
@@ -16,12 +16,17 @@ function ownerMatcher(pathString) {
   return matcher.ignores.bind(matcher);
 }
 
-export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
+export default function Codeowners(currentPath, fileName = "CODEOWNERS") {
   const pathOrCwd = currentPath || process.cwd();
 
   this.codeownersFilePath = findUp.sync(
-    [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
-    { cwd: pathOrCwd },
+    [
+      `.github/${fileName}`,
+      `.gitlab/${fileName}`,
+      `docs/${fileName}`,
+      `${fileName}`,
+    ],
+    { cwd: pathOrCwd }
   );
 
   if (!this.codeownersFilePath) {
@@ -39,11 +44,15 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   const codeownersFile = path.basename(this.codeownersFilePath);
 
   if (codeownersFile !== fileName) {
-    throw new Error(`Found a ${fileName} file but it was lower-cased: ${this.codeownersFilePath}`);
+    throw new Error(
+      `Found a ${fileName} file but it was lower-cased: ${this.codeownersFilePath}`
+    );
   }
 
   if (isDirectory.sync(this.codeownersFilePath)) {
-    throw new Error(`Found a ${fileName} but it's a directory: ${this.codeownersFilePath}`);
+    throw new Error(
+      `Found a ${fileName} but it's a directory: ${this.codeownersFilePath}`
+    );
   }
 
   const lines = fs
@@ -51,7 +60,7 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
     .toString()
     .split(/\r\n|\r|\n/)
     .map((line) => line.trim())
-    .filter((line) => line.length && !line.startsWith('#'));
+    .filter((line) => line.length && !line.startsWith("#"));
 
   const ownerSections = [];
   let currentSection = { name: null, owners: [], entries: [] };
@@ -60,7 +69,7 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
     if (SECTION_REGEX.test(line)) {
       const groups = SECTION_REGEX.exec(line);
       const name = groups[1];
-      const owners = (groups[3] || '').split(/\s+/).filter((v) => v.length);
+      const owners = (groups[3] || "").split(/\s+/).filter((v) => v.length);
 
       ownerSections.push(currentSection);
       currentSection = { name, owners, entries: [] };
@@ -68,14 +77,16 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
     }
     if (ENTRY_REGEX.test(line)) {
       const groups = ENTRY_REGEX.exec(line);
-      const pathString = groups[1].replace(/\\\s/g, ' ');
-      const usernames = (groups[2] || '').split(/\s+/).filter((v) => v.length);
+      const pathString = groups[1].replace(/\\\s/g, " ");
+      const usernames = (groups[2] || "").split(/\s+/).filter((v) => v.length);
 
       currentSection.entries.push({
         path: pathString,
-        usernames: [...usernames, ...currentSection.owners],
+        usernames: usernames.length
+          ? [...usernames]
+          : [...currentSection.owners],
         match: ownerMatcher(pathString),
-      })
+      });
       continue;
     }
     console.error(`Could not parse line: ${line}`);
@@ -89,14 +100,17 @@ export default function Codeowners(currentPath, fileName = 'CODEOWNERS') {
 }
 
 Codeowners.prototype.getOwner = function getOwner(filePath) {
-  const owners = [];
   for (const section of this.ownerSections) {
+    const owners = [];
     for (const entry of section.entries) {
       if (entry.match(filePath)) {
         owners.push(...entry.usernames);
       }
     }
+    if (owners.length) {
+      return [...new Set(owners)];
+    }
   }
 
-  return [...new Set(owners)];
+  return [];
 };
