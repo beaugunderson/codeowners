@@ -116,6 +116,34 @@ program
     }
   });
 
+program
+  .command('list <path>')
+  .description('list users/teams that own a specific path')
+  .option(
+    '-c, --codeowners-filename <codeowners_filename>',
+    'specify CODEOWNERS filename',
+    'CODEOWNERS'
+  )
+  .action((checkPath, options) => {
+    let codeowners;
+
+    // instantiate new Codeowners obj
+    try {
+      codeowners = new Codeowners(rootPath, options.codeownersFilename);
+    } catch (e) {
+      console.error(e.message);
+      process.exit(1);
+    }
+
+    // call getOwner() on `path`
+    const owners = codeowners.getOwner(checkPath);
+
+    // print owners
+    for (const currOwner of owners) {
+      console.log(`${currOwner}`);
+    }
+  })
+
 if (!process.argv.slice(2).length) {
   program.outputHelp();
 }
