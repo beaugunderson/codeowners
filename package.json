@@ -5,7 +5,7 @@
   "main": "codeowners.js",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "index.js"
+    "codeowners": "cli.js"
   },
   "scripts": {
     "test": "vitest",
