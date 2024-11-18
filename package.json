@@ -5,10 +5,10 @@
   "main": "codeowners.js",
   "types": "codeowners.d.ts",
   "bin": {
-    "codeowners": "index.js"
+    "codeowners": "cli.js"
   },
   "scripts": {
-    "test": "jest",
+    "test": "vitest",
     "lint": "eslint --ext *.js"
   },
   "keywords": [
@@ -38,8 +38,8 @@
     "eslint-config-prettier": "^7.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
-    "jest": "^27.5.1",
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "vitest": "^2.1.5"
   },
   "repository": {
     "type": "git",
