@@ -1,4 +1,5 @@
-/* global describe it expect */
+import { describe, it, expect } from 'vitest';
+
 const Codeowners = require('./codeowners.js');
 
 const repos = new Codeowners();
