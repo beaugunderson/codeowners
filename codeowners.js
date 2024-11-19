@@ -59,13 +59,17 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
       continue;
     }
 
-    const [pathString, ...usernames] = line.split(/\s+/);
+    const [data, ...comment] = line.split("#");
+    const [pathString, ...usernames] = data.split(/\s+/);
 
-    ownerEntries.push({
+    const entry = {
       path: pathString,
-      usernames,
+      usernames: usernames.filter(Boolean),
       match: ownerMatcher(pathString),
-    });
+    }
+    if(comment && comment.length) entry.comment = comment.join("")
+
+    ownerEntries.push(entry);
   }
 
   // reverse the owner entries to search from bottom to top
