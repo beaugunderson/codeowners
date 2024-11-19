@@ -6,6 +6,13 @@ const ignore = require('ignore');
 const isDirectory = require('is-directory');
 const path = require('path');
 const trueCasePath = require('true-case-path');
+const checkPaths = [
+  '.bitbucket/',
+  '.github/',
+  '.gitlab/',
+  'docs/',
+  ''
+];
 
 function ownerMatcher(pathString) {
   const matcher = ignore().add(pathString);
@@ -16,7 +23,7 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
   const pathOrCwd = currentPath || process.cwd();
 
   const codeownersPath = findUp.sync(
-    [`.github/${fileName}`, `.gitlab/${fileName}`, `docs/${fileName}`, `${fileName}`],
+    checkPaths.map(checkPath => `${checkPath}${fileName}`),
     { cwd: pathOrCwd }
   );
 
@@ -30,7 +37,8 @@ function Codeowners(currentPath, fileName = 'CODEOWNERS') {
 
   // We might have found a bare codeowners file or one inside the three supported subdirectories.
   // In the latter case the project root is up another level.
-  if (this.codeownersDirectory.match(/\/(.github|.gitlab|docs)$/i)) {
+  // @TODO Use the checkPaths array to build this regex or otherwise do the test/match.
+  if (this.codeownersDirectory.match(/\/(.github|.gitlab|docs|.bitbucket)$/i)) {
     this.codeownersDirectory = path.dirname(this.codeownersDirectory);
   }
 
